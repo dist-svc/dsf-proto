@@ -1,4 +1,4 @@
-# Common Data Structures
+# Base Objects
 
 A common common base structure is used across both Messages and Pages to simplify encoding and parsing. 
 All pages provide contain an ID derived from the service or node public key and a signature, allowing validation of both Messages and Pages prior to parsing.
