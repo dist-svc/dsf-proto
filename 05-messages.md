@@ -1,4 +1,3 @@
-
 # Messages
 
 Messages are used for communication between DSD peers. All messages must contain a Node ID (DatabaseID) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.

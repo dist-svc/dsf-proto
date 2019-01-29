@@ -1,6 +1,4 @@
-# Distributed Service Discovery (DSD) Protocol Specification
-
-## Overview
+# Overview
 
 DSD is an approach to secure, trustworthy and distributed registration and discovery of arbitrary services, based on Public Key Cryptography for identity and Authenticity, Secret Key Cryptography for privacy, and utilising a Kademlia-derived Distributed Hash Table (DHT) as a supporting Database.
 
