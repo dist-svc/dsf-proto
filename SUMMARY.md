@@ -1,13 +1,13 @@
+# Table of contents
 
-# Summary
-
-- [Usage](01-usage.md) describes the use of DSD and how to get started
-- [Data Structures]()
-  - [Base](02-base.md) describes the base protocol object structure
-  - [Options](03-options.md) describes options for use in protocol objects
-  - [Pages](04-pages.md) describes pages used for registration in the database
-  - [Messages](05-messages.md) describes messages used for communication between services
-- [Apis](06-apis.md) describes common DSD APIs
-- [Operation](07-operation.md) provides a description of high level and low level protocol operations
-- [Security](08-security.md) discusses approaches to security, privacy, and security in DSD
+* [Introduction](README.md)
+* [Usage](01-usage.md)
+* [Data Structures](data-structures/README.md)
+  * [Base](data-structures/02-base.md)
+  * [Options](data-structures/03-options.md)
+  * [Pages](data-structures/04-pages.md)
+  * [Messages](data-structures/05-messages.md)
+* [Apis](06-apis.md)
+* [Operation](07-operation.md)
+* [Security](08-security.md)
 

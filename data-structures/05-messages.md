@@ -1,33 +1,36 @@
 # Messages
 
-Messages are used for communication between DSD peers. All messages must contain a Node ID (DatabaseID) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.
+## Messages
 
-## Fields
+Messages are used for communication between DSD peers. All messages must contain a Node ID \(DatabaseID\) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.
 
-See [Common](#Common) section for header information
+### Fields
 
-- **ID**, Node ID (hash of peer public key)
-- **Data**, DSD message data
-- **Secure Options**, private (and encrypted) well-defined service options for a given message
-- **Public Options**, public well-defined service options for a given message
-- **Signature**, a cryptographic signature over the whole message
+See [Common](05-messages.md#Common) section for header information
 
-# Types
+* **ID**, Node ID \(hash of peer public key\)
+* **Data**, DSD message data
+* **Secure Options**, private \(and encrypted\) well-defined service options for a given message
+* **Public Options**, public well-defined service options for a given message
+* **Signature**, a cryptographic signature over the whole message
 
-| Name             | ID     | Description                                                  | Type     |
-| ---------------- | ------ | ------------------------------------------------------------ | -------- |
-| [Ping](##ping) | 0x8000 | Ping a peer to determine liveliness                          | Request  |
-| [FindNodes](##FindNodes)    | 0x8001 | Find nodes near a specified ID                               | Request  |
-| [FindValues](##FindValues)   | 0x8002 | Find values at a specified ID                                | Request  |
-| [Store](##Store)        | 0x8003 | Store value(s) at a specified ID                             | Request  |
-| [NodesFound](##NodesFound)   | 0x8004 | Return a list of nodes near a specified ID                   | Response |
-| [ValuesFound](##ValuesFound)  | 0x8005 | Return a list of values near a specified ID                  | Response |
-| [NoResult](##NoResult)     | 0x8006 | Indicate no nodes or values were found (or respond to a ping) | Response |
+## Types
 
-## Ping
+| Name | ID | Description | Type |
+| :--- | :--- | :--- | :--- |
+| [Ping](05-messages.md##ping) | 0x8000 | Ping a peer to determine liveliness | Request |
+| [FindNodes](05-messages.md##FindNodes) | 0x8001 | Find nodes near a specified ID | Request |
+| [FindValues](05-messages.md##FindValues) | 0x8002 | Find values at a specified ID | Request |
+| [Store](05-messages.md##Store) | 0x8003 | Store value\(s\) at a specified ID | Request |
+| [NodesFound](05-messages.md##NodesFound) | 0x8004 | Return a list of nodes near a specified ID | Response |
+| [ValuesFound](05-messages.md##ValuesFound) | 0x8005 | Return a list of values near a specified ID | Response |
+| [NoResult](05-messages.md##NoResult) | 0x8006 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
+
+### Ping
+
 Ping messages are used to ping peers to determine liveliness.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -63,11 +66,11 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## FindNodes
+### FindNodes
+
 FindNodes is used to find a set of nodes close to the provided ID.
 
-
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -110,11 +113,11 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## FindValues
+### FindValues
 
-FindValues messages are used to search for values (ie. pages) within DSD.
+FindValues messages are used to search for values \(ie. pages\) within DSD.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -158,11 +161,11 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## Store
+### Store
 
-Store messages are used to store values (ie. pages) in DSD.
+Store messages are used to store values \(ie. pages\) in DSD.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -206,14 +209,13 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-
-## NodesFound
+### NodesFound
 
 NodesFound contains a list of nodes near the requested ID. This may be returned as a response to a FindNodes or FindValues request.
 
 `Peer Blocks` consist of a sequential set of options beginning with a Peer ID, and followed by any options to attach to that Peer ID. A peer block must have at least one of the V4Addr and v6Addr options to be considered valid.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -272,11 +274,11 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## ValuesFound
+### ValuesFound
 
-ValuesFound messages contain a list of values (pages) associated with the value requested.
+ValuesFound messages contain a list of values \(pages\) associated with the value requested.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -320,11 +322,11 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## NoResult
+### NoResult
 
 Response to Pings and FindNode or FindValue messages where no data was found
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -359,3 +361,4 @@ Signature
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
+

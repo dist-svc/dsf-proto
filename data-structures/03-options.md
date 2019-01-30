@@ -1,11 +1,10 @@
 # Options
 
-Options are common objects for use across different page types. Some options may be required for a given page to be parsed or accepted into the database.
-Option Kind and Length are always specified for backwards / cross compatibility to allow parsers to skip unrecognised options.
+Options are common objects for use across different page types. Some options may be required for a given page to be parsed or accepted into the database. Option Kind and Length are always specified for backwards / cross compatibility to allow parsers to skip unrecognised options.
 
 **Structure:**
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -20,27 +19,24 @@ Option Kind and Length are always specified for backwards / cross compatibility 
 
 **Kinds:**
 
-| Name                      | ID   | Description                | Multiple? | Size     |
-| ------------------------- | ---- | -------------------------- | --------- | -------- |
-| [PubKey](### PubKey)    | 0x00 | Public Key                 | No        | 32-byte  |
-| [DatabaseId]()            | 0x01 | Database (Peer or Page) ID | No        | 32-byte  |
-| [RequestId]()             | 0x02 | Message Request ID         | No        | 8-byte   |
-| [Kind]()                  | 0x03 | Arbitrary Service Kind     | No        | Variable |
-| [Name]()                  | 0x04 | Arbitrary Service Name     | No        | Variable |
-| [V4Addr]()                | 0x05 | IPv4 address and port      | Yes       | 10 byte  |
-| [V6Addr]()                | 0x06 | IPv6 address and port      | Yes       | 18 byte  |
-| [Issued]()                | 0x07 | Issued timestamp           | No        | 8 byte   |
-| [Expiry]()                | 0x08 | Expirty timestamp          | No        | 8 byte   |
-| [Metadata]()              | 0x09 | Metadata Key-Value pair    | Yes       | Variable |
-
-
-
+| Name | ID | Description | Multiple? | Size |
+| :--- | :--- | :--- | :--- | :--- |
+| [PubKey](03-options.md#pubkey) | 0x00 | Public Key | No | 32-byte |
+| [DatabaseId](03-options.md#databaseid) | 0x01 | Database \(Peer or Page\) ID | No | 32-byte |
+| [RequestId](03-options.md#request-id) | 0x02 | Message Request ID | No | 8-byte |
+| [Kind](03-options.md#service-kind) | 0x03 | Arbitrary Service Kind | No | Variable |
+| [Name](03-options.md#service-name) | 0x04 | Arbitrary Service Name | No | Variable |
+| [V4Addr](03-options.md#ipv4-address) | 0x05 | IPv4 address and port | Yes | 10 byte |
+| [V6Addr](03-options.md#ipv6-address) | 0x06 | IPv6 address and port | Yes | 18 byte |
+| [Issued](03-options.md#issued) | 0x07 | Issued timestamp | No | 8 byte |
+| [Expiry](03-options.md#expiry) | 0x08 | Expirty timestamp | No | 8 byte |
+| [Metadata](03-options.md#metadata) | 0x09 | Metadata Key-Value pair | Yes | Variable |
 
 ## PubKey
 
 The cryptographic public key associated with a service or peer.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -57,7 +53,7 @@ The cryptographic public key associated with a service or peer.
 
 The Database ID of a service, peer or page
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -74,7 +70,7 @@ The Database ID of a service, peer or page
 
 A Request ID used for pairing requests and responses
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -89,12 +85,11 @@ A Request ID used for pairing requests and responses
 
 ## Service Kind
 
-Arbitrary service kind, a string that identifies a type of service, for example: `mqtt` for an MQTT broker.
-These are not required to be globally unique or consistent across different users (unless interoperability is desired).
+Arbitrary service kind, a string that identifies a type of service, for example: `mqtt` for an MQTT broker. These are not required to be globally unique or consistent across different users \(unless interoperability is desired\).
 
 Note that for interoperability or more complex services with data, page kinds should be used in favour of this field.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -109,10 +104,9 @@ Note that for interoperability or more complex services with data, page kinds sh
 
 ## Service Name
 
-Arbitrary service name, a user defined string to identify a service, for example: `home-web` for a home web server.
-These are not required to be globally unique or consistent across different users.
+Arbitrary service name, a user defined string to identify a service, for example: `home-web` for a home web server. These are not required to be globally unique or consistent across different users.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -125,12 +119,11 @@ These are not required to be globally unique or consistent across different user
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-
 ## IPv4 Address
 
 An IPv4 Address and Port for connecting to a service or peer.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -146,7 +139,7 @@ An IPv4 Address and Port for connecting to a service or peer.
 
 An IPv6 Address and Port for connecting to a service or peer.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -168,7 +161,7 @@ An IPv6 Address and Port for connecting to a service or peer.
 
 A timestamp at which the page was issued as a 64-bit little-endian uint representing milliseconds from the unix epoc.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -183,7 +176,7 @@ A timestamp at which the page was issued as a 64-bit little-endian uint represen
 
 A timestamp at which the page should expire as a 64-bit little-endian uint representing milliseconds from the unix epoc.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -198,7 +191,7 @@ A timestamp at which the page should expire as a 64-bit little-endian uint repre
 
 Arbitrary Key:Value pairs as UTF-8 strings, separated using the `|` character, this character may not be used in the Key or Value terms.
 
-```
+```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

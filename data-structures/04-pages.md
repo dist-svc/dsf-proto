@@ -4,26 +4,25 @@ Pages are split into two types, Primary pages published at an SID by the service
 
 ## Fields
 
-See [Common](###Common) section for header information
+See [Common](04-pages.md###Common) section for header information
 
-- **ID**, Service ID (hash of service public key)
-- **Data**, Arbitrary service data, parsing and encoding specific to a given service type (and thus page kind)
-- **Secure Options**, private (and encrypted) well-defined service options for a given page
-- **Public Options**, public well-defined service options for a given page
-- **Signature**, a cryptographic signature over the whole page
+* **ID**, Service ID \(hash of service public key\)
+* **Data**, Arbitrary service data, parsing and encoding specific to a given service type \(and thus page kind\)
+* **Secure Options**, private \(and encrypted\) well-defined service options for a given page
+* **Public Options**, public well-defined service options for a given page
+* **Signature**, a cryptographic signature over the whole page
 
 If the `encrypted` flag is set, data and secure options fields must be decrypted before parsing.
 
-
 ## Primary Pages
 
-Primary pages are used for service definition / registration / discovery, and should include the information required to connect to a service (though this may be encrypted). 
+Primary pages are used for service definition / registration / discovery, and should include the information required to connect to a service \(though this may be encrypted\).
 
 The ID at which the page is published is a hash of the cryptographic public key of the service, and the page should be signed using this key.
 
 Data and Secure options are protocol specific. The public options must contain: The `Service Public Key` as well as `Issued` and `Expiry` timestamps. This page may contain `IPv4` and `IPv6` options to allow others to contact the peer, and these options may be in the public or secret option sections to support privacy.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -90,7 +89,7 @@ Secondary pages are used for attaching information to services, and can be poste
 
 The `Page ID` is that of the associated service, Data and Secure Options are protocol specific. Public options must contain the `Peer ID`, as well as `Issued` and `Expiry` timestamps. The Peer ID option links the secondary page to an existing primary page for the peer in question, where contact information is provided.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -155,9 +154,9 @@ Signature
 
 Peer pages are a special category of Primary pages used to identify Peers that may provide replication or mirroring of a service, and to provide a mechanism to connect back to those peers, designated using a `Page Kind` of `0x0001`.
 
-The `ID` is the ID of the peer (ie. hash of the peer's public key), and this must also contain a `PubKey` for the peer, `Issued` and `Expiry` timestamps. This page may contain `IPv4` and `IPv6` options to allow others to contact the peer, and these options may be in the public or secret option sections to support privacy.
+The `ID` is the ID of the peer \(ie. hash of the peer's public key\), and this must also contain a `PubKey` for the peer, `Issued` and `Expiry` timestamps. This page may contain `IPv4` and `IPv6` options to allow others to contact the peer, and these options may be in the public or secret option sections to support privacy.
 
-```
+```text
 Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -244,3 +243,4 @@ Signature
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
+
