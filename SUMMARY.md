@@ -1,7 +1,7 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [Usage](01-usage.md)
+* [Usage](usage.md)
 * [Data Structures](data-structures/README.md)
   * [Base](data-structures/02-base.md)
   * [Options](data-structures/03-options.md)

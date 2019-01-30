@@ -21,7 +21,7 @@ In addition to _Primary_ pages, published by the service directly, _Secondary_ p
 ## Organisation
 
 * [README.md](./) contains this overview
-* [01-usage.md](01-usage.md) describes the use of DSD and how to get started
+* [01-usage.md](usage.md) describes the use of DSD and how to get started
 * [02-base.md]() describes the base protocol object structure
 * [03-options.md](data-structures/03-options.md) describes options for use in protocol objects
 * [04-pages.md](data-structures/04-pages.md) describes pages used for registration in the database
