@@ -4,7 +4,7 @@ Pages are split into two types, Primary pages published at an SID by the service
 
 ## Fields
 
-See [Common](04-pages.md###Common) section for header information
+See [Common](pages.md###Common) section for header information
 
 * **ID**, Service ID \(hash of service public key\)
 * **Data**, Arbitrary service data, parsing and encoding specific to a given service type \(and thus page kind\)

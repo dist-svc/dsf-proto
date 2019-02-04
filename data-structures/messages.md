@@ -6,7 +6,7 @@ Messages are used for communication between DSD peers. All messages must contain
 
 ### Fields
 
-See [Common](05-messages.md#Common) section for header information
+See [Common](messages.md#Common) section for header information
 
 * **ID**, Node ID \(hash of peer public key\)
 * **Data**, DSD message data
@@ -18,13 +18,13 @@ See [Common](05-messages.md#Common) section for header information
 
 | Name | ID | Description | Type |
 | :--- | :--- | :--- | :--- |
-| [Ping](05-messages.md##ping) | 0x8000 | Ping a peer to determine liveliness | Request |
-| [FindNodes](05-messages.md##FindNodes) | 0x8001 | Find nodes near a specified ID | Request |
-| [FindValues](05-messages.md##FindValues) | 0x8002 | Find values at a specified ID | Request |
-| [Store](05-messages.md##Store) | 0x8003 | Store value\(s\) at a specified ID | Request |
-| [NodesFound](05-messages.md##NodesFound) | 0x8004 | Return a list of nodes near a specified ID | Response |
-| [ValuesFound](05-messages.md##ValuesFound) | 0x8005 | Return a list of values near a specified ID | Response |
-| [NoResult](05-messages.md##NoResult) | 0x8006 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
+| [Ping](messages.md##ping) | 0x8000 | Ping a peer to determine liveliness | Request |
+| [FindNodes](messages.md##FindNodes) | 0x8001 | Find nodes near a specified ID | Request |
+| [FindValues](messages.md##FindValues) | 0x8002 | Find values at a specified ID | Request |
+| [Store](messages.md##Store) | 0x8003 | Store value\(s\) at a specified ID | Request |
+| [NodesFound](messages.md##NodesFound) | 0x8004 | Return a list of nodes near a specified ID | Response |
+| [ValuesFound](messages.md##ValuesFound) | 0x8005 | Return a list of values near a specified ID | Response |
+| [NoResult](messages.md##NoResult) | 0x8006 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
 
 ### Ping
 
