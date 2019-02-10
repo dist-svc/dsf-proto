@@ -21,16 +21,17 @@ Options are common objects for use across different page types. Some options may
 
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |
-| [PubKey](options.md#pubkey) | 0x00 | Public Key | No | 32-byte |
-| [DatabaseId](options.md#databaseid) | 0x01 | Database \(Peer or Page\) ID | No | 32-byte |
-| [RequestId](options.md#request-id) | 0x02 | Message Request ID | No | 8-byte |
-| [Kind](options.md#service-kind) | 0x03 | Arbitrary Service Kind | No | Variable |
-| [Name](options.md#service-name) | 0x04 | Arbitrary Service Name | No | Variable |
-| [V4Addr](options.md#ipv4-address) | 0x05 | IPv4 address and port | Yes | 10 byte |
-| [V6Addr](options.md#ipv6-address) | 0x06 | IPv6 address and port | Yes | 18 byte |
-| [Issued](options.md#issued) | 0x07 | Issued timestamp | No | 8 byte |
-| [Expiry](options.md#expiry) | 0x08 | Expirty timestamp | No | 8 byte |
-| [Metadata](options.md#metadata) | 0x09 | Metadata Key-Value pair | Yes | Variable |
+| [PubKey](options.md#pubkey) | 0x0000 | Public Key | No | 32-byte |
+| [DatabaseId](options.md#databaseid) | 0x0001 | Database \(Peer or Page\) ID | No | 32-byte |
+| [RequestId](options.md#request-id) | 0x0002 | Message Request ID | No | 8-byte |
+| [Kind](options.md#service-kind) | 0x0003 | Arbitrary Service Kind | No | Variable |
+| [Name](options.md#service-name) | 0x0004 | Arbitrary Service Name | No | Variable |
+| [V4Addr](options.md#ipv4-address) | 0x0005 | IPv4 address and port | Yes | 10 byte |
+| [V6Addr](options.md#ipv6-address) | 0x0006 | IPv6 address and port | Yes | 18 byte |
+| [Issued](options.md#issued) | 0x0007 | Issued timestamp | No | 8 byte |
+| [Expiry](options.md#expiry) | 0x0008 | Expirty timestamp | No | 8 byte |
+| [Metadata](options.md#metadata) | 0x0009 | Metadata Key-Value pair | Yes | Variable |
+| [Unit](../applications/iot.md#options) | 0x8001 | (IoT) endpoint unit | Yes | Variable |
 
 ## PubKey
 
