@@ -18,17 +18,21 @@ See [Common](messages.md#Common) section for header information
 
 | Name | ID | Description | Type |
 | :--- | :--- | :--- | :--- |
-| [Ping](messages.md##ping) | 0x8000 | Ping a peer to determine liveliness | Request |
-| [FindNodes](messages.md##FindNodes) | 0x8001 | Find nodes near a specified ID | Request |
-| [FindValues](messages.md##FindValues) | 0x8002 | Find values at a specified ID | Request |
-| [Store](messages.md##Store) | 0x8003 | Store value\(s\) at a specified ID | Request |
-| [NodesFound](messages.md##NodesFound) | 0x8004 | Return a list of nodes near a specified ID | Response |
-| [ValuesFound](messages.md##ValuesFound) | 0x8005 | Return a list of values near a specified ID | Response |
-| [NoResult](messages.md##NoResult) | 0x8006 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
+| Hello | 0x8000 | Initiate communication with a peer or the network | Request |
+| Status | 0x8001 | Status message for responding to peer requests | Response |
+| [Ping](messages.md##ping) | 0x8002 | Ping a peer to determine liveliness | Request |
+| [FindNodes](messages.md##FindNodes) | 0x8003 | Find nodes near a specified ID | Request |
+| [FindValues](messages.md##FindValues) | 0x8004 | Find values at a specified ID | Request |
+| [Store](messages.md##Store) | 0x8005 | Store value\(s\) at a specified ID | Request |
+| [NodesFound](messages.md##NodesFound) | 0x8006 | Return a list of nodes near a specified ID | Response |
+| [ValuesFound](messages.md##ValuesFound) | 0x8007 | Return a list of values near a specified ID | Response |
+| [NoResult](messages.md##NoResult) | 0x8008 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
 
-### Ping
+### Hello
 
-Ping messages are used to ping peers to determine liveliness.
+Hello messages are used to connect to a peer and exchange identity information, supporting bootstrapping onto the network and of future peer to peer communication.
+
+
 
 ```text
 Header
@@ -36,6 +40,64 @@ Header
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Message Kind = 0x8000     |              Flags            |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Page Version = 0       |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Request ID Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x02             |               16              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                           Request ID                          |
+|                   16-byte Request ID Length                   |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Public Key Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x00             |               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Public Key                          /
+/                    32-byte ECDSA Public Key                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+### Status
+
+Status response message to indicate request status to peers
+
+```text
+TODO
+```
+
+### Ping
+
+Ping messages are used to ping peers to determine and maintain peer liveliness.
+
+```text
+Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Message Kind = 0x8002     |              Flags            |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = 0        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -75,7 +137,7 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8001     |              Flags            |            
+|     Message Kind = 0x8003     |              Flags            |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = 32       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -122,7 +184,7 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8002     |              Flags            |             
+|     Message Kind = 0x8004     |              Flags            |             
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = 32       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -170,7 +232,7 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8003     |              Flags            |             
+|     Message Kind = 0x8005     |              Flags            |             
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -220,7 +282,7 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8004     |              Flags            |            
+|     Message Kind = 0x8006     |              Flags            |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -283,7 +345,7 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8005     |              Flags            |           
+|     Message Kind = 0x8007     |              Flags            |           
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -331,7 +393,7 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8006     |              Flags            |            
+|     Message Kind = 0x8008     |              Flags            |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        Page Version = 0       |        Data Length = 0        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

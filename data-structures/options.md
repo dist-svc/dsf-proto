@@ -31,7 +31,7 @@ Options are common objects for use across different page types. Some options may
 | [Issued](options.md#issued) | 0x0007 | Issued timestamp | No | 8 byte |
 | [Expiry](options.md#expiry) | 0x0008 | Expirty timestamp | No | 8 byte |
 | [Metadata](options.md#metadata) | 0x0009 | Metadata Key-Value pair | Yes | Variable |
-| [Unit](../applications/iot.md#options) | 0x8001 | (IoT) endpoint unit | Yes | Variable |
+| [Unit](../applications/iot.md#options) | 0x8001 | \(IoT\) endpoint unit | Yes | Variable |
 
 ## PubKey
 

@@ -2,7 +2,7 @@
 description: A DSA based application for the Internet of Things (IoT)
 ---
 
-# DSD-IoT
+# IoT
 
 A DSD application to support IoT devices and data sharing.
 
@@ -12,8 +12,7 @@ DSD-IoT adds a set of options for endpoint description.
 
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |
-| [Unit](iot.md#unit) | 0x8001 | (IoT) endpoint unit | Yes | Variable |
-
+| [Unit](iot.md#unit) | 0x8001 | \(IoT\) endpoint unit | Yes | Variable |
 
 ## Service Pages
 
@@ -31,7 +30,6 @@ IoT service pages are a primary page where data is a list of endpoints, ordered 
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
-
 
 ## Data Blocks
 
@@ -56,7 +54,8 @@ Endpoint data is a set of data objects corresponding to each endpoint, ordered b
 
 | Name | ID | Description | Size |
 | :--- | :--- | :--- | :--- |
-| Bool    | 0x0001 | Boolean value (encoded in top bit) | 0 byte |
-| Int32   | 0x0002 | 32-bit integer value               | 4 byte |
-| Float32 | 0x0003 | 32-bit floating point value        | 4 byte |
-| Float64 | 0x0004 | 64-bit floating point value        | 8 byte |
+| Bool | 0x0001 | Boolean value \(encoded in top bit\) | 0 byte |
+| Int32 | 0x0002 | 32-bit integer value | 4 byte |
+| Float32 | 0x0003 | 32-bit floating point value | 4 byte |
+| Float64 | 0x0004 | 64-bit floating point value | 8 byte |
+
