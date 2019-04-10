@@ -1,37 +1,31 @@
 # Base
 
-A common common base structure is used across both Messages and Pages to simplify encoding and parsing. All pages provide contain an ID derived from the service or node public key and a signature, allowing validation of both Messages and Pages prior to parsing.
+A common common base structure is used across Pages, Messages, and Data, to simplify encoding and parsing. All base objects contain an ID derived from the service or node public key and a signature, allowing validation prior to further parsing (so long as the associated key is known).
 
 ```text
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|           Page Kind           |              Flags            |           
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|          Page Version         |            Data Len           |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|       Secure Options Len      |       Public Options Len      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
-/                               ID                              /
-/             Protocol Defined ID Length (32-bytes)             /
+/                           Header                              /
+/          Protocol Defined Header Length (48-bytes)            /
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                             Data                              /
-/       Optional, Variable Length Data (4-byte aligned)         /
+/                Optional, Variable Length Data                 /
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                        Secure Options                         /
-/        Optional, Variable Length Data (4-byte aligned)        /
+/                 Optional, Variable Length Data                /
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                        Public Options                         /
-/       Optional, Variable Length Data (4-byte aligned)         /
+/                Optional, Variable Length Data                 /
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -43,7 +37,26 @@ A common common base structure is used across both Messages and Pages to simplif
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-Kind:
+## Header
+
+```
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |        Application ID         |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Object Kind         |             Flags             |         
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Index            |            Data Len           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Secure Options Len      |       Public Options Len      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                               ID                              /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+### Page Kind:
 
 ```text
  0                   1           
@@ -53,7 +66,7 @@ Kind:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-Flags:
+### Flags:
 
 ```text
  0                   1           
@@ -64,28 +77,31 @@ Flags:
 ```
 
 ## Header Fields
-
-* **Kind** indicates protocol-specific page or message kind
-  * kinds must be globally unique within DSD
-  * To apply for a page kind \(or kinds\) apply for a PR on this repo against the `KINDS.yml` listing
-  * For testing purposes and/or private use that does not require registration, a page kind of  `0x0FFF` may be used
-  * Bit 15 indicates whether the block is core dsd \(0\) or implementation \(1\) defined 
-  * Bits 13:14 indicate the block base kind
-    * 0b000 for pages \(service / peer registration etc.\)
-    * 0b001 for request messages \(between peers\)
-    * 0b010 for response messages \(between peers\)
-    * 0b011 for data \(merkle-tree based data structures\)
+* **Protocol Version** is the DSD protocol version, this must be 0x0000
 * **Flags**
   * Bit 15: Secondary, indicates this is a secondary object
   * Bit 14: Encrypted, indicates data and secure options fields have been encrypted
   * Bit 13: Address Request, messages only, indicates the responder should attach a peer address option to the response \(used for address discovery\)
-* **Page version**, monotonically increasing counter for page replacement
-* **Data Length**, length of the variable length data field
-* **Secure Options length**, length of the variable length secure options field
+* **Application ID** indicates a specific application in DSD (0x0000 for DSD core)
+* **Object Kind** indicates protocol-specific page or message kind
+  * kinds must be globally unique within DSD
+  * To apply for a page kind \(or kinds\) apply for a PR on this repo against the `KINDS.yml` listing
+  * For testing purposes and/or private use that does not require registration, an application ID of  `0x0FFF` may be used
+  * Bits 15:14 indicate the block base kind
+    * 0b00 for pages \(service / peer registration etc.\)
+    * 0b01 for request messages \(between peers\)
+    * 0b10 for response messages \(between peers\)
+    * 0b11 for data \(merkle-tree based data structures\)
+* **Index**
+  * For pages, this is a *Page Version*, a monotonically increasing counter for page replacement
+  * For messages, this is a *Request ID* to uniquely map request and response objects
+  * For data, this field must be 0x0000
+* **Data Length**, length in bytes of the variable length data field
+* **Secure Options length**, length in bytes of the variable length secure options field
   * This allows options such as IP addresses for service connections to be encrypted alongside service data
-* **Public options length**, length of the variable length public options field
+* **Public options length**, length in bytes of the variable length public options field
   * These options are used to specify public page information such as Public Keys and Expiry Time
-* **ID** is the Service ID for Pages or the Node ID for messages
+* **ID** is the *Service ID* for Pages and Data or the *Node ID* for messages
 
 ## Body
 
@@ -99,7 +115,7 @@ Flags:
 
 ## Encryption
 
-If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm \(see [0x-security.md](https://github.com/ryankurte/dsd-proto/tree/c85420e467a9e6ea2e0c63afe79835a4f4ae71dc/0x-security.md)\), and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
+If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm \(see [0x-security.md](https://github.com/ryankurte/dsd-proto/tree/master/0x-security.md)\), and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
 
 ```text
  0                   1                   2                   3
@@ -107,8 +123,7 @@ If the encryption flag is set, Data and SecureOptions fields are encrypted using
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                             Field                             /
-/          Optional, Variable Length (4-byte aligned)           /
+/                    Optional, Variable Length                  /
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
-

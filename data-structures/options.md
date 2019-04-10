@@ -8,7 +8,7 @@ Options are common objects for use across different page types. Some options may
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|          Option Kind          |         Option Length         |
+|          Option Kind        |A|         Option Length         |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                          Option Data                          /
@@ -19,18 +19,19 @@ Options are common objects for use across different page types. Some options may
 
 **Kinds:**
 
+The top bit of the Option Kind field (marked `A`) indicates whether an option is part of the core implementation (A=0), or application specific (A=1) to allow mixed use of common DSD options and application specific options in a single object.
+
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |
 | [PubKey](options.md#pubkey) | 0x0000 | Public Key | No | 32-byte |
 | [DatabaseId](options.md#databaseid) | 0x0001 | Database \(Peer or Page\) ID | No | 32-byte |
-| [RequestId](options.md#request-id) | 0x0002 | Message Request ID | No | 8-byte |
-| [Kind](options.md#service-kind) | 0x0003 | Arbitrary Service Kind | No | Variable |
-| [Name](options.md#service-name) | 0x0004 | Arbitrary Service Name | No | Variable |
-| [V4Addr](options.md#ipv4-address) | 0x0005 | IPv4 address and port | Yes | 10 byte |
-| [V6Addr](options.md#ipv6-address) | 0x0006 | IPv6 address and port | Yes | 18 byte |
-| [Issued](options.md#issued) | 0x0007 | Issued timestamp | No | 8 byte |
-| [Expiry](options.md#expiry) | 0x0008 | Expirty timestamp | No | 8 byte |
-| [Metadata](options.md#metadata) | 0x0009 | Metadata Key-Value pair | Yes | Variable |
+| [Kind](options.md#service-kind) | 0x0002 | Arbitrary Service Kind | No | Variable |
+| [Name](options.md#service-name) | 0x0003 | Arbitrary Service Name | No | Variable |
+| [V4Addr](options.md#ipv4-address) | 0x0004 | IPv4 address and port | Yes | 10 byte |
+| [V6Addr](options.md#ipv6-address) | 0x0005 | IPv6 address and port | Yes | 18 byte |
+| [Issued](options.md#issued) | 0x0006 | Issued timestamp | No | 8 byte |
+| [Expiry](options.md#expiry) | 0x0007 | Expirty timestamp | No | 8 byte |
+| [Metadata](options.md#metadata) | 0x0008 | Metadata Key-Value pair | Yes | Variable |
 | [Unit](../applications/iot.md#options) | 0x8001 | \(IoT\) endpoint unit | Yes | Variable |
 
 ## PubKey
@@ -41,7 +42,7 @@ The cryptographic public key associated with a service or peer.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x00             |               32              |
+|      Option Kind = 0x0000   |0|               32              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 /                           Public Key                          /
@@ -58,28 +59,11 @@ The Database ID of a service, peer or page
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x01             |               32              |
+|      Option Kind = 0x0001   |0|               32              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 /                            Peer ID                            /
 /               32-byte Protocol Defined ID Length              /
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-```
-
-## Request ID
-
-A Request ID used for pairing requests and responses
-
-```text
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x02             |               16              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                           Request ID                          |
-|                   16-byte Request ID Length                   |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
@@ -94,7 +78,7 @@ Note that for interoperability or more complex services with data, page kinds sh
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x03             |          Kind Length          |
+|     Option Kind = 0x0002    |0|       Option Length = N       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 /                   Kind (utf8 encoded string)                  /
@@ -111,7 +95,7 @@ Arbitrary service name, a user defined string to identify a service, for example
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x04             |          Name Length          |
+|     Option Kind = 0x0003    |0|       Option Length = N       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 /                   Name (utf8 encoded string)                  /
@@ -128,7 +112,7 @@ An IPv4 Address and Port for connecting to a service or peer.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x05             |               10              |
+|      Option Kind = 0x0004   |0|       Option Length = 10      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                          IPv4 Address                         |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -144,7 +128,7 @@ An IPv6 Address and Port for connecting to a service or peer.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x06             |               10              |
+|      Option Kind = 0x0005   |0|       Option Length = 32      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 |                                                               |
@@ -166,7 +150,7 @@ A timestamp at which the page was issued as a 64-bit little-endian uint represen
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x07             |               8               |
+|      Option Kind = 0x0006   |0|       Option Length = 8       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                            Issued                             |
 |                                                               |
@@ -181,7 +165,7 @@ A timestamp at which the page should expire as a 64-bit little-endian uint repre
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x08             |               8               |
+|      Option Kind = 0x0007   |0|       Option Length = 8       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                            Expiry                             |
 |                                                               |
@@ -196,7 +180,7 @@ Arbitrary Key:Value pairs as UTF-8 strings, separated using the `|` character, t
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x09             |           Variable            |
+|      Option Kind = 0x0008   |0|       Option Length = N       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                             String                            /

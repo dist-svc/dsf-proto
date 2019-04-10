@@ -18,12 +18,12 @@ See [Common](messages.md#Common) section for header information
 
 | Name | ID | Description | Type |
 | :--- | :--- | :--- | :--- |
-| Hello | 0x8000 | Initiate communication with a peer or the network | Request |
-| Status | 0x8001 | Status message for responding to peer requests | Response |
-| [Ping](messages.md##ping) | 0x8002 | Ping a peer to determine liveliness | Request |
-| [FindNodes](messages.md##FindNodes) | 0x8003 | Find nodes near a specified ID | Request |
-| [FindValues](messages.md##FindValues) | 0x8004 | Find values at a specified ID | Request |
-| [Store](messages.md##Store) | 0x8005 | Store value\(s\) at a specified ID | Request |
+| Hello | 0x4000 | Initiate communication with a peer or the network | Request |
+| [Ping](messages.md##ping) | 0x4002 | Ping a peer to determine liveliness | Request |
+| [FindNodes](messages.md##FindNodes) | 0x4003 | Find nodes near a specified ID | Request |
+| [FindValues](messages.md##FindValues) | 0x4004 | Find values at a specified ID | Request |
+| [Store](messages.md##Store) | 0x4005 | Store value\(s\) at a specified ID | Request |
+| [Status](messages.md##Status) | 0x8001 | Status message for responding to peer requests | Response |
 | [NodesFound](messages.md##NodesFound) | 0x8006 | Return a list of nodes near a specified ID | Response |
 | [ValuesFound](messages.md##ValuesFound) | 0x8007 | Return a list of values near a specified ID | Response |
 | [NoResult](messages.md##NoResult) | 0x8008 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
@@ -39,25 +39,17 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8000     |              Flags            |            
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = 0        |
+|      Object Kind = 0x4000     |             Flags             |           
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 /                            Node ID                            /
 /             Protocol Defined ID Length (32-bytes)             /
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Request ID Option (Required, public option section)
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x02             |               16              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                           Request ID                          |
-|                   16-byte Request ID Length                   |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -97,25 +89,17 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8002     |              Flags            |            
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = 0        |
+|      Object Kind = 0x4002     |             Flags             |           
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 /                            Node ID                            /
 /             Protocol Defined ID Length (32-bytes)             /
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Request ID Option (Required, public option section)
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x02             |               16              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                           Request ID                          |
-|                   16-byte Request ID Length                   |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -137,9 +121,11 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8003     |              Flags            |            
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = 32       |
+|      Object Kind = 0x4003     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 32       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -153,16 +139,6 @@ Header
 |                                                               |
 /                   Find Node ID (DatabaseID)                   /
 /             Protocol Defined ID Length (32-bytes)             /
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Request ID Option (Required, public option section)
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x02             |               16              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                           Request ID                          |
-|                   16-byte Request ID Length                   |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -184,9 +160,11 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8004     |              Flags            |             
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = 32       |
+|      Object Kind = 0x4004     |             Flags             |              
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 32       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -201,16 +179,6 @@ Value ID (Required, Body)
 |                                                               |
 /                     Value ID (DatabaseID)                     /
 /             Protocol Defined ID Length (32-bytes)             /
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Request ID Option (Required, public option section)
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x02             |               16              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                           Request ID                          |
-|                   16-byte Request ID Length                   |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -232,9 +200,11 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8005     |              Flags            |             
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = N        |
+|      Object Kind = 0x4005     |             Flags             | |             
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = M     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -249,16 +219,6 @@ Pages (repeated, data section)
 |                                                               |
 /                            Page                               /
 /           Variable Length (defined in page header)            /
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-Request ID Option (Required, public option section)
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              0x02             |               16              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-|                           Request ID                          |
-|                   16-byte Request ID Length                   |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -282,9 +242,11 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8006     |              Flags            |            
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = N        |
+|      Object Kind = 0x8006     |             Flags             |             
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |     Public Options Len = M    |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -345,9 +307,11 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8007     |              Flags            |           
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = N        |
+|      Object Kind = 0x8007     |             Flags             |           
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = M     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -393,9 +357,11 @@ Header
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Message Kind = 0x8008     |              Flags            |            
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|        Page Version = 0       |        Data Length = 0        |
+|      Object Kind = 0x8008     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Secure Options Len = 0    |    Public Options Len = N     |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
