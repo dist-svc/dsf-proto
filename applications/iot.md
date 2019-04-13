@@ -4,11 +4,11 @@ description: A DSA based application for the Internet of Things (IoT)
 
 # IoT
 
-A DSD application to support IoT devices and data sharing.
+A DSF application to support IoT devices and data sharing.
 
 ## Options
 
-DSD-IoT adds a set of options for endpoint description.
+DSF-IoT adds a set of options for endpoint description.
 
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |

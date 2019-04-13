@@ -2,14 +2,14 @@
 
 ## Messages
 
-Messages are used for communication between DSD peers. All messages must contain a Node ID \(DatabaseID\) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.
+Messages are used for communication between DSF peers. All messages must contain a Node ID \(DatabaseID\) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.
 
 ### Fields
 
 See [Common](messages.md#Common) section for header information
 
 * **ID**, Node ID \(hash of peer public key\)
-* **Data**, DSD message data
+* **Data**, DSF message data
 * **Secure Options**, private \(and encrypted\) well-defined service options for a given message
 * **Public Options**, public well-defined service options for a given message
 * **Signature**, a cryptographic signature over the whole message
@@ -177,7 +177,7 @@ Signature
 
 ### FindValues
 
-FindValues messages are used to search for values \(ie. pages\) within DSD.
+FindValues messages are used to search for values \(ie. pages\) within DSF.
 
 ```text
 Header
@@ -225,7 +225,7 @@ Signature
 
 ### Store
 
-Store messages are used to store values \(ie. pages\) in DSD.
+Store messages are used to store values \(ie. pages\) in DSF.
 
 ```text
 Header
