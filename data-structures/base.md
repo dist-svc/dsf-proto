@@ -77,14 +77,14 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 ```
 
 ## Header Fields
-* **Protocol Version** is the DSD protocol version, this must be 0x0000
+* **Protocol Version** is the DSF protocol version, this must be 0x0000
 * **Flags**
   * Bit 15: Secondary, indicates this is a secondary object
   * Bit 14: Encrypted, indicates data and secure options fields have been encrypted
   * Bit 13: Address Request, messages only, indicates the responder should attach a peer address option to the response \(used for address discovery\)
-* **Application ID** indicates a specific application in DSD (0x0000 for DSD core)
+* **Application ID** indicates a specific application in DSF (0x0000 for DSF core)
 * **Object Kind** indicates protocol-specific page or message kind
-  * kinds must be globally unique within DSD
+  * kinds must be globally unique within DSF
   * To apply for a page kind \(or kinds\) apply for a PR on this repo against the `KINDS.yml` listing
   * For testing purposes and/or private use that does not require registration, an application ID of  `0x0FFF` may be used
   * Bits 15:14 indicate the block base kind
@@ -105,7 +105,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 
 ## Body
 
-* **Data** contains arbitrary data for service pages \(based on the page kind\), or DSD data for messages \(such as pages to be transferred\). The data section may be encrypted.
+* **Data** contains arbitrary data for service pages \(based on the page kind\), or DSF data for messages \(such as pages to be transferred\). The data section may be encrypted.
 * **Secure Options** contain options that are encrypted and can thus only be parsed by those with the appropriate keys
 * **Public Options** contain public options associated with a page or message
 
@@ -115,7 +115,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 
 ## Encryption
 
-If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm \(see [0x-security.md](https://github.com/ryankurte/dsd-proto/tree/master/0x-security.md)\), and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
+If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm \(see [0x-security.md](https://github.com/ryankurte/dsf-proto/tree/master/0x-security.md)\), and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
 
 ```text
  0                   1                   2                   3

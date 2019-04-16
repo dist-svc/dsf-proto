@@ -19,7 +19,7 @@ Options are common objects for use across different page types. Some options may
 
 **Kinds:**
 
-The top bit of the Option Kind field (marked `A`) indicates whether an option is part of the core implementation (A=0), or application specific (A=1) to allow mixed use of common DSD options and application specific options in a single object.
+The top bit of the Option Kind field (marked `A`) indicates whether an option is part of the core implementation (A=0), or application specific (A=1) to allow mixed use of common DSF options and application specific options in a single object.
 
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |
@@ -174,7 +174,7 @@ A timestamp at which the page should expire as a 64-bit little-endian uint repre
 
 ## Metadata
 
-Arbitrary Key:Value pairs as UTF-8 strings, separated using the `|` character, this character may not be used in the Key or Value terms.
+Arbitrary Key:Value pairs as UTF-8 strings, separated using the ascii `|` character, this character may not be used in the Key or Value terms.
 
 ```text
  0                   1                   2                   3

@@ -1,13 +1,13 @@
 ---
 
 applications:
-  dsd:
+  dsf:
     id: 0x0000
     description: Core application implementation
     pages:
       - id: 0x0001
         name: Peer Page
-        description: Peer pages are a primary page describing a Peer in DSD
+        description: Peer pages are a primary page describing a Peer in DSF
       - id: 0x0002
         name: Replica Page
         description: Replica pages link an existing service to a peer that is replicating that service
