@@ -2,7 +2,7 @@
 
 the Distributed Service Framework (DSF) is an approach to secure, trustworthy and distributed registration and discovery of arbitrary services, based on public key cryptography for identity and authenticity, secret key cryptography for privacy, and utilising a kademlia-derived distributed hash table \(DHT\) as a supporting Database.
 
-This is designed to support the simple and safe development and deployment of distributed applications, without requiring any specific knowledge of distributed systems or cryptography. You can read more about the goals and approach [here](https://drive.google.com/open?id=1-RFdQuVXcE5GmVBgtxzvZzFpKU0OnxE6).
+This is designed to support the simple and safe development and deployment of distributed applications, without requiring any specific knowledge of distributed systems or cryptography. You can read more about the goals and approach [here](https://drive.google.com/open?id=1-RFdQuVXcE5GmVBgtxzvZzFpKU0OnxE6), and view this documentation rendered [here](https://ryankurte.gitbook.io/dsf).
 
 The use of a DHT allows DSF to operate in a peer-to-peer manner, without requiring common / centralised / trusted infrastructure. The use of public-key cryptography derived identifiers allows services \(and communications\) in DSF to be verified.
 
