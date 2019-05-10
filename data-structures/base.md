@@ -72,7 +72,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
  0                   1           
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|A|         Reserved          |E|        
+|A|         Reserved        |E|S|        
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
@@ -81,7 +81,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 * **Flags**
   * Bit 15: Secondary, indicates this is a secondary object
   * Bit 14: Encrypted, indicates data and secure options fields have been encrypted
-  * Bit 13: Address Request, messages only, indicates the responder should attach a peer address option to the response \(used for address discovery\)
+  * Bit 0: Address Request, messages only, indicates the responder should attach a peer address option to the response \(may be used for address discovery\)
 * **Application ID** indicates a specific application in DSF (0x0000 for DSF core)
 * **Object Kind** indicates protocol-specific page or message kind
   * kinds must be globally unique within DSF
