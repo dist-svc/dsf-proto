@@ -24,22 +24,18 @@ See [Common](messages.md#Common) section for header information
 | [FindValues](messages.md##FindValues) | 0x4003 | Find values at a specified ID | Request |
 | [Store](messages.md##Store) | 0x4004 | Store value\(s\) at a specified ID | Request |
 | Subscribe | 0x4005 | Subscribe to data from a given service | Request |
-| Query                                   | 0x4006 | Query for data from a given service                          | Request  |
-| PushData                                | 0x4007 | Data objects sent to a subscriber or in response to a query  | Request  |
+| Query | 0x4006 | Query for data from a given service | Request |
+| PushData | 0x4007 | Data objects sent to a subscriber or in response to a query | Request |
 | [Status](messages.md##Status) | 0x8001 | Status message for responding to peer requests | Response |
 | [NodesFound](messages.md##NodesFound) | 0x8002 | Return a list of nodes near a specified ID | Response |
-| [ValuesFound](messages.md##ValuesFound) | 0x8003 | Return a list of values (pages) near a specified ID | Response |
+| [ValuesFound](messages.md##ValuesFound) | 0x8003 | Return a list of values \(pages\) near a specified ID | Response |
 | [NoResult](messages.md##NoResult) | 0x8004 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
-
-
 
 ## Request Messages
 
 ### Hello
 
 Hello messages are used to connect to a peer and exchange identity information, supporting bootstrapping onto the network and of future peer to peer communication.
-
-
 
 ```text
 Header
@@ -366,8 +362,6 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-
-
 ## Response Messages
 
 ### Status
@@ -407,17 +401,13 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-
-
 #### Status Codes
 
-| Code       | Name | Description        |
-| ---------- | ---- | ------------------ |
-| 0x00000000 | OK   | Request successful |
-|            |      |                    |
-|            |      |                    |
-
-
+| Code | Name | Description |
+| :--- | :--- | :--- |
+| 0x00000000 | OK | Request successful |
+|  |  |  |
+|  |  |  |
 
 ### NodesFound
 
@@ -547,3 +537,4 @@ Signature
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
+

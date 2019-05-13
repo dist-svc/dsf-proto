@@ -19,7 +19,7 @@ Options are common objects for use across different page types. Some options may
 
 **Kinds:**
 
-The top bit of the Option Kind field (marked `A`) indicates whether an option is part of the core implementation (A=0), or application specific (A=1) to allow mixed use of common DSF core options and application specific options in a single object.
+The top bit of the Option Kind field \(marked `A`\) indicates whether an option is part of the core implementation \(A=0\), or application specific \(A=1\) to allow mixed use of common DSF core options and application specific options in a single object.
 
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |

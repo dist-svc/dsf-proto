@@ -18,4 +18,3 @@ In addition to _Primary_ pages, published by the service directly, _Secondary_ p
 * **Should** use small / efficient encodings for use with resource-constrained and embedded system
   * Except where this would impair protocol compatibility or similar
 
-

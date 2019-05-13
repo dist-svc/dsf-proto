@@ -1,6 +1,6 @@
 # Base
 
-A common common base structure is used across Pages, Messages, and Data, to simplify encoding and parsing. All base objects contain an ID derived from the service or node public key and a signature, allowing validation prior to further parsing (so long as the associated key is known).
+A common common base structure is used across Pages, Messages, and Data, to simplify encoding and parsing. All base objects contain an ID derived from the service or node public key and a signature, allowing validation prior to further parsing \(so long as the associated key is known\).
 
 ```text
  0                   1                   2                   3
@@ -39,7 +39,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 
 ## Header
 
-```
+```text
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |        Application ID         |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -77,12 +77,13 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 ```
 
 ## Header Fields
+
 * **Protocol Version** is the DSF protocol version, this must be 0x0000
 * **Flags**
   * Bit 15: Secondary, indicates this is a secondary object
   * Bit 14: Encrypted, indicates data and secure options fields have been encrypted
   * Bit 0: Address Request, messages only, indicates the responder should attach a peer address option to the response \(may be used for address discovery\)
-* **Application ID** indicates a specific application in DSF (0x0000 for DSF core)
+* **Application ID** indicates a specific application in DSF \(0x0000 for DSF core\)
 * **Object Kind** indicates protocol-specific page or message kind
   * kinds must be globally unique within DSF
   * To apply for a page kind \(or kinds\) apply for a PR on this repo against the `KINDS.yml` listing
@@ -93,15 +94,15 @@ A common common base structure is used across Pages, Messages, and Data, to simp
     * 0b10 for response messages \(between peers\)
     * 0b11 for data \(merkle-tree based data structures\)
 * **Index**
-  * For pages, this is a *Page Version*, a monotonically increasing counter for page replacement
-  * For messages, this is a *Request ID* to uniquely map request and response objects
+  * For pages, this is a _Page Version_, a monotonically increasing counter for page replacement
+  * For messages, this is a _Request ID_ to uniquely map request and response objects
   * For data, this field must be 0x0000
 * **Data Length**, length in bytes of the variable length data field
 * **Secure Options length**, length in bytes of the variable length secure options field
   * This allows options such as IP addresses for service connections to be encrypted alongside service data
 * **Public options length**, length in bytes of the variable length public options field
   * These options are used to specify public page information such as Public Keys and Expiry Time
-* **ID** is the *Service ID* for Pages and Data or the *Node ID* for messages
+* **ID** is the _Service ID_ for Pages and Data or the _Node ID_ for messages
 
 ## Body
 
@@ -127,3 +128,4 @@ If the encryption flag is set, Data and SecureOptions fields are encrypted using
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
+
