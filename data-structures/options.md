@@ -30,9 +30,10 @@ The top bit of the Option Kind field \(marked `A`\) indicates whether an option 
 | [Name](options.md#service-name) | 0x0004 | Arbitrary Service Name | No | Variable |
 | [V4Addr](options.md#ipv4-address) | 0x0005 | IPv4 address and port | Yes | 10 byte |
 | [V6Addr](options.md#ipv6-address) | 0x0006 | IPv6 address and port | Yes | 18 byte |
-| [Issued](options.md#issued) | 0x0007 | Issued timestamp | No | 8 byte |
-| [Expiry](options.md#expiry) | 0x0008 | Expirty timestamp | No | 8 byte |
-| [Metadata](options.md#metadata) | 0x0009 | Metadata Key-Value pair | Yes | Variable |
+| [Issued/Since](options.md#issued) | 0x0007 | Issued or Since timestamp | No | 8 byte |
+| [Expiry/Until](options.md#expiry) | 0x0008 | Expiry or Until timestamp | No | 8 byte |
+| Limit | 0x0009 | Limit number of responses | No | 4-byte |
+| [Metadata](options.md#metadata) | 0x000a | Metadata Key-Value pair | Yes | Variable |
 | [Unit](../applications/iot.md#options) | 0x8001 | \(IoT\) endpoint unit | Yes | Variable |
 
 ## PubKey
@@ -160,9 +161,11 @@ An IPv6 Address and Port for connecting to a service or peer.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## Issued
+## Issued/Since
 
-A timestamp at which the page was issued as a 64-bit little-endian uint representing milliseconds from the unix epoc.
+A timestamp at which the page was issued or the since field for a time-bounded request.
+
+Encoded as a 64-bit little-endian uint representing milliseconds from the unix epoc.
 
 ```text
  0                   1                   2                   3
@@ -175,9 +178,11 @@ A timestamp at which the page was issued as a 64-bit little-endian uint represen
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-## Expiry
+## Expiry/Until
 
-A timestamp at which the page should expire as a 64-bit little-endian uint representing milliseconds from the unix epoc.
+A timestamp at which the page should expire, or the until field for a time-bounded request.
+
+Encoded as a 64-bit little-endian uint representing milliseconds from the unix epoc
 
 ```text
  0                   1                   2                   3
@@ -190,6 +195,23 @@ A timestamp at which the page should expire as a 64-bit little-endian uint repre
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
+## Limit
+
+A limit to set the maximum number of returned objects for a given request
+
+Encoded as a 64-bit little-endian uint representing milliseconds from the unix epoc
+
+```text
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0009   |0|       Option Length = 4       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Limit                              |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
 ## Metadata
 
 Arbitrary Key:Value pairs as UTF-8 strings, separated using the ascii `|` character, this character may not be used in the Key or Value terms.
@@ -198,7 +220,7 @@ Arbitrary Key:Value pairs as UTF-8 strings, separated using the ascii `|` charac
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Option Kind = 0x0009   |0|       Option Length = N       |
+|      Option Kind = 0x000a   |0|       Option Length = N       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
 /                             String                            /

@@ -56,7 +56,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-### Page Kind:
+### Object Kind:
 
 ```text
  0                   1           

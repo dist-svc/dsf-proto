@@ -30,6 +30,7 @@ See [Common](messages.md#Common) section for header information
 | [NodesFound](messages.md##NodesFound) | 0x8002 | Return a list of nodes near a specified ID | Response |
 | [ValuesFound](messages.md##ValuesFound) | 0x8003 | Return a list of values \(pages\) near a specified ID | Response |
 | [NoResult](messages.md##NoResult) | 0x8004 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
+| PullData | 0x8005 | Data returned in response to a query | Response |
 
 ## Request Messages
 
