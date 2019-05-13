@@ -14,19 +14,26 @@ See [Common](messages.md#Common) section for header information
 * **Public Options**, public well-defined service options for a given message
 * **Signature**, a cryptographic signature over the whole message
 
-## Types
+## Message Types
 
 | Name | ID | Description | Type |
 | :--- | :--- | :--- | :--- |
 | Hello | 0x4000 | Initiate communication with a peer or the network | Request |
-| [Ping](messages.md##ping) | 0x4002 | Ping a peer to determine liveliness | Request |
-| [FindNodes](messages.md##FindNodes) | 0x4003 | Find nodes near a specified ID | Request |
-| [FindValues](messages.md##FindValues) | 0x4004 | Find values at a specified ID | Request |
-| [Store](messages.md##Store) | 0x4005 | Store value\(s\) at a specified ID | Request |
+| [Ping](messages.md##ping) | 0x4001 | Ping a peer to determine liveliness | Request |
+| [FindNodes](messages.md##FindNodes) | 0x4002 | Find nodes near a specified ID | Request |
+| [FindValues](messages.md##FindValues) | 0x4003 | Find values at a specified ID | Request |
+| [Store](messages.md##Store) | 0x4004 | Store value\(s\) at a specified ID | Request |
+| Subscribe | 0x4005 | Subscribe to data from a given service | Request |
+| Query                                   | 0x4006 | Query for data from a given service                          | Request  |
+| PushData                                | 0x4007 | Data objects sent to a subscriber or in response to a query  | Request  |
 | [Status](messages.md##Status) | 0x8001 | Status message for responding to peer requests | Response |
-| [NodesFound](messages.md##NodesFound) | 0x8006 | Return a list of nodes near a specified ID | Response |
-| [ValuesFound](messages.md##ValuesFound) | 0x8007 | Return a list of values near a specified ID | Response |
-| [NoResult](messages.md##NoResult) | 0x8008 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
+| [NodesFound](messages.md##NodesFound) | 0x8002 | Return a list of nodes near a specified ID | Response |
+| [ValuesFound](messages.md##ValuesFound) | 0x8003 | Return a list of values (pages) near a specified ID | Response |
+| [NoResult](messages.md##NoResult) | 0x8004 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
+
+
+
+## Request Messages
 
 ### Hello
 
@@ -91,7 +98,7 @@ Header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Object Kind = 0x4002     |             Flags             |           
+|      Object Kind = 0x4001     |             Flags             |           
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Request ID          |        Data Length = 0        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -123,7 +130,7 @@ Header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Object Kind = 0x4003     |             Flags             |            
+|      Object Kind = 0x4002     |             Flags             |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Request ID          |        Data Length = 32       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -162,7 +169,7 @@ Header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Object Kind = 0x4004     |             Flags             |              
+|      Object Kind = 0x4003     |             Flags             |              
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Request ID          |        Data Length = 32       |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -202,7 +209,7 @@ Header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Object Kind = 0x4005     |             Flags             | |             
+|      Object Kind = 0x4004     |             Flags             |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Request ID          |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -230,6 +237,187 @@ Signature
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
+
+### Subscribe
+
+Subscribe messages are used to initiate a subscription to a given service, and must be periodically re-issued to continue the subscription.
+
+```text
+Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4005     |             Flags             |          
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service ID (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Service ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+### Query
+
+Query messages are used to request a chunk of data for a given service, resulting in a PullData response.
+
+```text
+Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4006     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service ID (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Service ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+### PushData
+
+PushData messages are used to send data to subscribers as it becomes available
+
+```text
+Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4005     |             Flags             | |             
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service ID (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Service ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Data Pages (repeated, data section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                          Data Page                            /
+/           Variable Length (defined in page header)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+
+
+## Response Messages
+
+### Status
+
+Status message, used as a response for requests where status information is required, for example, in response to Hello, Subscription, and Query messages.
+
+```text
+Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x8008     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+StatusCode
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Status Code (4-bytes)                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+
+
+#### Status Codes
+
+| Code       | Name | Description        |
+| ---------- | ---- | ------------------ |
+| 0x00000000 | OK   | Request successful |
+|            |      |                    |
+|            |      |                    |
+
+
 
 ### NodesFound
 
@@ -359,4 +547,3 @@ Signature
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
-
