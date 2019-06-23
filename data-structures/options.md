@@ -34,7 +34,9 @@ The top bit of the Option Kind field \(marked `A`\) indicates whether an option 
 | [Expiry/Until](options.md#expiry) | 0x0008 | Expiry or Until timestamp | No | 8 byte |
 | Limit | 0x0009 | Limit number of responses | No | 4-byte |
 | [Metadata](options.md#metadata) | 0x000a | Metadata Key-Value pair | Yes | Variable |
-| [Unit](../applications/iot.md#options) | 0x8001 | \(IoT\) endpoint unit | Yes | Variable |
+| Global Location | 0x0010 | GPS \(Lat, Lng, Alt\) location option | No | 12-byte |
+| Local Location | 0x0011 | Local \(X, Y, Z\) location option | No | 12-byte |
+|  |  |  |  |  |
 
 ## PubKey
 

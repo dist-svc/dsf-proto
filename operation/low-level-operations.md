@@ -1,6 +1,7 @@
 ---
 description: >-
-  This page describes low-level operations that must be implemented by DSF clients to support the defined higher level operations
+  This page describes low-level operations that must be implemented by DSF
+  clients to support the defined higher level operations
 ---
 
 # Low Level Operations
@@ -15,8 +16,6 @@ description: >-
 4. Handle message and reply
 
 ### Sending a message
-
-
 
 ## Storing and retrieving pages
 
@@ -40,17 +39,12 @@ description: >-
 3. Add public key to local cache
 4. Return page
 
-
-
 ## Requesting and Sending Data
-
-
-
-
 
 ## Handling failures
 
 On a signature verification failure
 
-- increment peer failure count
-- if failure count &gt; max failures, add ID / Address to block list
+* increment peer failure count
+* if failure count &gt; max failures, add ID / Address to block list
+
