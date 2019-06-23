@@ -54,5 +54,8 @@ DSF-DNS adds a set of options corresponding to standard DNS entries
 
 **TODO**
 
-## Data Blocks
+## See also
+
+- https://en.wikipedia.org/wiki/Domain_Name_System
+
 
