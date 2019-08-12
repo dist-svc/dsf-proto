@@ -1,0 +1,6 @@
+[book]
+authors = ["ryan kurte"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Distributed Service Framework (DSF) Protocol Specification"
