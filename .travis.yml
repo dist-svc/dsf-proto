@@ -1,0 +1,12 @@
+language: generic
+
+services:
+  - docker
+
+script:
+  - docker run --rm -it -v`pwd`:/root -u $(id -u ${USER}):$(id -g ${USER}) mdbook /bin/bash -c "mdbook build /root"
+
+after_script:
+  - tar -cf dsf-proto-$TRAVIS_TAG.tgz book/*
+
+
