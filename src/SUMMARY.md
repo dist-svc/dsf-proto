@@ -1,13 +1,13 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [Usage](usage.md)
+* [Getting Started](usage.md)
 * [Data Structures](data-structures/README.md)
   * [Base](data-structures/base.md)
   * [Options](data-structures/options.md)
   * [Pages](data-structures/pages.md)
   * [Messages](data-structures/messages.md)
-* [Apis](apis.md)
+* [APIs](apis.md)
 * [Operation](operation/README.md)
   * [High Level Operations](operation/high-level-operations.md)
   * [Low Level Operations](operation/low-level-operations.md)

@@ -2,13 +2,15 @@
 description: The page describes the use of DSF
 ---
 
-# Usage
+# Getting Started
 
-## Creating and Consuming Services
+## Installation
 
-TODO
+DSF can be installed from pre-compiled binaries [here](https://github.com/ryankurte/dsf-impl/releases) or via cargo using `cargo install dsf-impl`
 
-## Building DSF Applications
+### Use
 
-TODO
+* dsf-util service subcommand used to create, register, search, and subscribe to services
+* * 
+
 

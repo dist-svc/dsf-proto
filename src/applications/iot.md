@@ -6,13 +6,17 @@ description: A DSA based application for the Internet of Things (IoT)
 
 A DSF application to support IoT devices and data sharing.
 
-## Options
+## Endpoint Options
 
 DSF-IoT adds a set of options for endpoint description.
 
 | Name | ID | Description | Multiple? | Size |
 | :--- | :--- | :--- | :--- | :--- |
-| [Unit](iot.md#unit) | 0x8001 | \(IoT\) endpoint unit | Yes | Variable |
+| Unit | 0x8001 | \(IoT\) Endpoint Unit | Yes\(\*\) | Variable |
+| Kind | 0x8002 | \(IoT\) Endpoint Kind | Yes\(\*\) | Variable |
+| Name | 0x8003 | \(IoT\) Endpoint Name | Yes\(\*\) | Variable |
+
+ \* One option per endpoint entry
 
 ## Service Pages
 
@@ -41,16 +45,16 @@ Endpoint data is a set of data objects corresponding to each endpoint, ordered b
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|          Endpoint ID          |           Data Type           |
+|          Endpoint ID          |          Value Type           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
-/                           Data Value                          /
+/                             Value                             /
 /             Variable Length Data (32-bit aligned)             /
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
-### Data Types
+### Value Types
 
 | Name | ID | Description | Size |
 | :--- | :--- | :--- | :--- |
