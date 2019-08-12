@@ -1,10 +1,8 @@
 # Messages
 
-## Messages
-
 Messages are used for communication between DSF peers. All messages must contain a Node ID \(DatabaseID\) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.
 
-### Fields
+## Fields
 
 See [Common](messages.md#Common) section for header information
 
@@ -23,14 +21,14 @@ See [Common](messages.md#Common) section for header information
 | [FindNodes](messages.md##FindNodes) | 0x4002 | Find nodes near a specified ID | Request |
 | [FindValues](messages.md##FindValues) | 0x4003 | Find values at a specified ID | Request |
 | [Store](messages.md##Store) | 0x4004 | Store value\(s\) at a specified ID | Request |
-| Subscribe | 0x4005 | Subscribe to data from a given service | Request |
-| Query | 0x4006 | Query for data from a given service | Request |
-| PushData | 0x4007 | Data objects sent to a subscriber or in response to a query | Request |
+| [Subscribe](messages.md##Subscribe) | 0x4005 | Subscribe to data from a given service | Request |
+| [Query](messages.md##Query) | 0x4006 | Query for data from a given service | Request |
+| [PushData](messages.md##PushData) | 0x4007 | Data objects sent to a subscriber or in response to a query | Request |
 | [Status](messages.md##Status) | 0x8001 | Status message for responding to peer requests | Response |
 | [NodesFound](messages.md##NodesFound) | 0x8002 | Return a list of nodes near a specified ID | Response |
 | [ValuesFound](messages.md##ValuesFound) | 0x8003 | Return a list of values \(pages\) near a specified ID | Response |
 | [NoResult](messages.md##NoResult) | 0x8004 | Indicate no nodes or values were found \(or respond to a ping\) | Response |
-| PullData | 0x8005 | Data returned in response to a query | Response |
+| [PullData](messages.md##PullData) | 0x8005 | Data returned in response to a query | Response |
 
 ## Request Messages
 

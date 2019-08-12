@@ -1,13 +1,6 @@
----
-description: >-
-  This section covers the high-level processes for interacting with DSF, this is
-  supported by lower level operations that enable storage and querying using the
-  DHT, and publishing and subscription to se
----
-
 # High Level Operations
 
-This section covers the high-level processes for interacting with DSF, this is supported by lower level operations that enable storage and querying using the DHT.
+This section covers the high-level processes for interacting with DSF, this is supported by lower level operations that enable storage and querying using the DHT and subscription and publication of data to services.
 
 ## Connecting to the network
 

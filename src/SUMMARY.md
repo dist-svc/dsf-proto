@@ -15,5 +15,4 @@
 
 ## Applications
 
-* [IoT](applications/iot.md)
 

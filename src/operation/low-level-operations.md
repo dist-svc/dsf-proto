@@ -1,10 +1,6 @@
----
-description: >-
-  This page describes low-level operations that must be implemented by DSF
-  clients to support the defined higher level operations
----
-
 # Low Level Operations
+
+This page describes low-level operations that must be implemented by DSF clients to support the defined higher level operations.
 
 ## Messaging
 
