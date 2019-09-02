@@ -22,8 +22,9 @@ See [Common](messages.md#Common) section for header information
 | [FindValues](messages.md##FindValues) | 0x4003 | Find values at a specified ID | Request |
 | [Store](messages.md##Store) | 0x4004 | Store value\(s\) at a specified ID | Request |
 | [Subscribe](messages.md##Subscribe) | 0x4005 | Subscribe to data from a given service | Request |
-| [Query](messages.md##Query) | 0x4006 | Query for data from a given service | Request |
-| [PushData](messages.md##PushData) | 0x4007 | Data objects sent to a subscriber or in response to a query | Request |
+| [Register](messages.md##Register) | 0x4006 | Request service registration (used for delegation) | Request |
+| [Query](messages.md##Query) | 0x4007 | Query for data from a given service | Request |
+| [PushData](messages.md##PushData) | 0x4008 | Data objects sent to a subscriber or in response to a query | Request |
 | [Status](messages.md##Status) | 0x8001 | Status message for responding to peer requests | Response |
 | [NodesFound](messages.md##NodesFound) | 0x8002 | Return a list of nodes near a specified ID | Response |
 | [ValuesFound](messages.md##ValuesFound) | 0x8003 | Return a list of values \(pages\) near a specified ID | Response |
@@ -273,6 +274,55 @@ Signature
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
+
+### Register
+
+Register messages are used to initiate a registration to a given service, and must be periodically re-issued to continue the registration.
+
+```text
+Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4006     |             Flags             |          
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service Page (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                        Service Page                           /
+/           Variable Length (defined in page header)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Expiry for delegation (Optional)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0008   |0|       Option Length = 8       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Expiry                             |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
 ### Query
 
 Query messages are used to request a chunk of data for a given service, resulting in a PullData response.
@@ -284,7 +334,7 @@ Header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Object Kind = 0x4006     |             Flags             |            
+|      Object Kind = 0x4007     |             Flags             |            
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Request ID          |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -360,7 +410,7 @@ Header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|      Object Kind = 0x4005     |             Flags             | |             
+|      Object Kind = 0x4008     |             Flags             | |             
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Request ID          |        Data Length = N        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

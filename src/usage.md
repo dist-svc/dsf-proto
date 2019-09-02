@@ -6,11 +6,11 @@ description: The page describes the use of DSF
 
 ## Installation
 
-DSF can be installed from pre-compiled binaries [here](https://github.com/ryankurte/dsf-impl/releases) or via cargo using `cargo install dsf-impl`
+DSF can be installed from pre-compiled binaries [here](REDACTED) or via cargo using `cargo install dsf-impl`.
 
-### Use
+### Usage
 
-* dsf-util service subcommand used to create, register, search, and subscribe to services
-* * 
+* `dsfc --help` to display cli options
+* `dsfd --help` to display daemon options
 
 

@@ -1,6 +1,7 @@
 # High Level Operations
 
 This section covers the high-level processes for interacting with DSF, this is supported by lower level operations that enable storage and querying using the DHT and subscription and publication of data to services.
+It is intended this will be expanded to become the source of truth for all DSF operations, however, currently this documentation lags [dsf-impl]().
 
 ## Connecting to the network
 
@@ -24,9 +25,21 @@ This section covers the high-level processes for interacting with DSF, this is s
 ## Locating a service
 
 1. Search for pages at a given ID
-2. Parse and Reduce returned pages
+2. Parse and Reduce returned pages (one primary, N secondary)
+3. Check Key / Signature against pinned values (if available)
+4. Return service
+
+## Subscribing to a service
+
+1. Search for pages at a given ID
+2. Parse and Reduce returned pages (filter for replicas)
+3. Select a subset of replicas based on QoS / availability
+4. Issue SubscribeRequest messages to replica subset to request future updates
 
 ## Querying for service data
 
-## Subscribing to a service
+1. Search for pages at a given ID
+2. Parse and Reduce returned pages (filter for replicas)
+3. Select a subset of replicas based on QoS / availability
+4. Issue Query messages to replica subset to request data
 

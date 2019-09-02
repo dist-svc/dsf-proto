@@ -116,7 +116,7 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 
 ## Encryption
 
-If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm \(see [0x-security.md](https://github.com/ryankurte/dsf-proto/tree/master/0x-security.md)\), and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
+If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm, and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
 
 ```text
  0                   1                   2                   3
