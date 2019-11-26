@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Generate mdbook
-      uses: ryankurte/action-mdbook@0.1.0
+      uses: ryankurte/action-mdbook@0.1.1
     - name: GitHub Pages
       uses: crazy-max/ghaction-github-pages@v1.2.4
       with:
