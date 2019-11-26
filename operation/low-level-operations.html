@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Low Level Operations - Distributed Service Framework (DSF) Protocol Specification</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="../usage.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="expanded "><a href="../data-structures/index.html"><strong aria-hidden="true">3.</strong> Data Structures</a></li><li><ol class="section"><li class="expanded "><a href="../data-structures/base.html"><strong aria-hidden="true">3.1.</strong> Base</a></li><li class="expanded "><a href="../data-structures/options.html"><strong aria-hidden="true">3.2.</strong> Options</a></li><li class="expanded "><a href="../data-structures/pages.html"><strong aria-hidden="true">3.3.</strong> Pages</a></li><li class="expanded "><a href="../data-structures/messages.html"><strong aria-hidden="true">3.4.</strong> Messages</a></li></ol></li><li class="expanded "><a href="../apis.html"><strong aria-hidden="true">4.</strong> APIs</a></li><li class="expanded "><a href="../operation/index.html"><strong aria-hidden="true">5.</strong> Operation</a></li><li><ol class="section"><li class="expanded "><a href="../operation/high-level-operations.html"><strong aria-hidden="true">5.1.</strong> High Level Operations</a></li><li class="expanded "><a href="../operation/low-level-operations.html" class="active"><strong aria-hidden="true">5.2.</strong> Low Level Operations</a></li></ol></li><li class="expanded "><a href="../security.html"><strong aria-hidden="true">6.</strong> Security</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Distributed Service Framework (DSF) Protocol Specification</h1>
+
+                        <div class="right-buttons">
+                            <a href="../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#low-level-operations" id="low-level-operations">Low Level Operations</a></h1>
+<p>This page describes low-level operations that must be implemented by DSF clients to support the defined higher level operations.
+It is intended this will be expanded to become the source of truth for all DSF operations, however, currently this documentation lags <a href="">dsf-impl</a>.</p>
+<h2><a class="header" href="#messaging" id="messaging">Messaging</a></h2>
+<h3><a class="header" href="#receiving-a-message" id="receiving-a-message">Receiving a message</a></h3>
+<ol>
+<li>Locate the public key associated with the peer (from the database or local cache)</li>
+<li>Validate the message signature against discovered ID</li>
+<li>Add public key to local cache</li>
+<li>Handle message and reply</li>
+</ol>
+<h3><a class="header" href="#sending-a-message" id="sending-a-message">Sending a message</a></h3>
+<ol>
+<li>Locate the public key and address associated with the peer (from the database or local cache)</li>
+<li>Sign message</li>
+<li>(Optionally) Encrypt message against peer public key</li>
+<li>Send message to peer address</li>
+</ol>
+<h2><a class="header" href="#storing-and-retrieving-pages" id="storing-and-retrieving-pages">Storing and retrieving pages</a></h2>
+<h3><a class="header" href="#storing-a-primary-page" id="storing-a-primary-page">Storing a Primary Page</a></h3>
+<ol>
+<li>Locate the public key associated with the page ID (included in page, from the database, from the local cache)</li>
+<li>Validate the ID matches the public key</li>
+<li>Validate the signature</li>
+<li>Parse the options</li>
+<li>Check required options exist</li>
+<li>Check new page version &gt; last page version</li>
+<li>Store page</li>
+</ol>
+<h3><a class="header" href="#storing-a-secondary-page" id="storing-a-secondary-page">Storing a Secondary Page</a></h3>
+<ol>
+<li>Find the public key associated with the peer ID (from the database or local cache)</li>
+<li>Validate the ID matches the public key</li>
+<li>Validate the signature</li>
+<li>Parse the options</li>
+<li>Check required options exist</li>
+<li>Check new page version &gt; last page version</li>
+<li>Store page</li>
+</ol>
+<h3><a class="header" href="#receiving-a-requested-page" id="receiving-a-requested-page">Receiving a (Requested) Page</a></h3>
+<ol>
+<li>Find the public key associated with the page ID (included in page, from the database, from the local cache)</li>
+<li>Validate the message signature against discovered ID</li>
+<li>Add public key to local cache</li>
+<li>Return page</li>
+</ol>
+<h2><a class="header" href="#requesting-and-sending-data" id="requesting-and-sending-data">Requesting and Sending Data</a></h2>
+<h2><a class="header" href="#handling-failures" id="handling-failures">Handling failures</a></h2>
+<p>On a signature verification failure</p>
+<ul>
+<li>increment peer failure count</li>
+<li>if failure count &gt; max failures, add ID / Address to block list</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../operation/high-level-operations.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../security.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../operation/high-level-operations.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../security.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

@@ -1,0 +1,1465 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Distributed Service Framework (DSF) Protocol Specification</title>
+        
+        <meta name="robots" content="noindex" />
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="expanded "><a href="data-structures/index.html"><strong aria-hidden="true">3.</strong> Data Structures</a></li><li><ol class="section"><li class="expanded "><a href="data-structures/base.html"><strong aria-hidden="true">3.1.</strong> Base</a></li><li class="expanded "><a href="data-structures/options.html"><strong aria-hidden="true">3.2.</strong> Options</a></li><li class="expanded "><a href="data-structures/pages.html"><strong aria-hidden="true">3.3.</strong> Pages</a></li><li class="expanded "><a href="data-structures/messages.html"><strong aria-hidden="true">3.4.</strong> Messages</a></li></ol></li><li class="expanded "><a href="apis.html"><strong aria-hidden="true">4.</strong> APIs</a></li><li class="expanded "><a href="operation/index.html"><strong aria-hidden="true">5.</strong> Operation</a></li><li><ol class="section"><li class="expanded "><a href="operation/high-level-operations.html"><strong aria-hidden="true">5.1.</strong> High Level Operations</a></li><li class="expanded "><a href="operation/low-level-operations.html"><strong aria-hidden="true">5.2.</strong> Low Level Operations</a></li></ol></li><li class="expanded "><a href="security.html"><strong aria-hidden="true">6.</strong> Security</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Distributed Service Framework (DSF) Protocol Specification</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>DSF is an approach to secure, trustworthy and distributed registration and discovery of arbitrary services, based on Public Key Cryptography for identity and Authenticity, Secret Key Cryptography for privacy, and utilising a Kademlia-derived Distributed Hash Table (DHT) as a supporting Database.</p>
+<p>DSF is designed to minimize the complexity of implementing distributed services, providing a shared namespace for discovery and </p>
+<p>The use of a DHT allows DSF to operate in a peer-to-peer manner, without requiring common / centralised / trusted infrastructure. The use of public-key cryptography derived identifiers allows services (and communications) in DSF to be verified.</p>
+<p>Services in DSF consist of a public-private key pair, and identifier derived from this public key, and arbitrary data and metadata to support the service. <strong>Services</strong> <em>publish</em> <strong>primary pages</strong> containing relevant information to the <strong>Database</strong> at a <strong>Service IDentifier (SID)</strong> derived from their public keys. Services can be located using these <strong>SIDs</strong>, and consumers can use the information in the pages to interact with the service. DSF also supports <strong>secondary pages</strong> that can be published to a given <strong>SID</strong> by a third party, this supports service annotation and replication.</p>
+<h2><a class="header" href="#goals" id="goals">Goals</a></h2>
+<ul>
+<li><strong>Must</strong> provide trustworthy / verifyable / immutable service identities</li>
+<li><strong>Must</strong> support service mobility and updates to services</li>
+<li><strong>Must</strong> support registration and discovery of arbitrary services</li>
+<li><strong>Must</strong> provide mechanisms for private / secure service registration and discovery</li>
+<li><strong>Must</strong> provide simple / human centric approaches for service registration and discovery</li>
+<li><strong>Should</strong> use small / efficient encodings for use with resource-constrained and embedded system
+<ul>
+<li>Except where this would impair protocol compatibility or similar</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#getting-started" id="getting-started">Getting Started</a></h1>
+<h2><a class="header" href="#installation" id="installation">Installation</a></h2>
+<p>DSF can be installed from pre-compiled binaries or .deb packages <a href="REDACTED">here</a> or via cargo using <code>cargo install dsf-impl</code>.</p>
+<h3><a class="header" href="#usage" id="usage">Usage</a></h3>
+<ul>
+<li><code>dsfc --help</code> to display cli options</li>
+<li><code>dsfd --help</code> to display daemon options</li>
+</ul>
+<h1><a class="header" href="#data-structures" id="data-structures">Data Structures</a></h1>
+<p>This section defines common data structures and encodings used by DSA.</p>
+<p>For a canonical registry of applications, pages, blocks and options, refer to <a href="data-structures/../kinds.yml">KINDS.yml</a>.</p>
+<h1><a class="header" href="#base" id="base">Base</a></h1>
+<p>A common common base structure is used across Pages, Messages, and Data, to simplify encoding and parsing. All base objects contain an ID derived from the service or node public key and a signature, allowing validation prior to further parsing (so long as the associated key is known).</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Header                              /
+/          Protocol Defined Header Length (48-bytes)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                             Data                              /
+/                Optional, Variable Length Data                 /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                        Secure Options                         /
+/                 Optional, Variable Length Data                /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                        Public Options                         /
+/                Optional, Variable Length Data                 /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/          Protocol Defined Signature Length (64-bytes)         /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#header" id="header">Header</a></h2>
+<pre><code class="language-text">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |        Application ID         |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Object Kind         |             Flags             |         
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Index            |            Data Len           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Secure Options Len      |       Public Options Len      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                               ID                              /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#object-kind" id="object-kind">Object Kind:</a></h3>
+<pre><code class="language-text"> 0                   1           
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Kind         |   B   |       
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#flags" id="flags">Flags:</a></h3>
+<pre><code class="language-text"> 0                   1           
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|A|         Reserved        |E|S|        
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#header-fields" id="header-fields">Header Fields</a></h2>
+<ul>
+<li><strong>Protocol Version</strong> is the DSF protocol version, this must be 0x0000</li>
+<li><strong>Flags</strong>
+<ul>
+<li>Bit 15: Secondary, indicates this is a secondary object</li>
+<li>Bit 14: Encrypted, indicates data and secure options fields have been encrypted</li>
+<li>Bit 0: Address Request, messages only, indicates the responder should attach a peer address option to the response (may be used for address discovery)</li>
+</ul>
+</li>
+<li><strong>Application ID</strong> indicates a specific application in DSF (0x0000 for DSF core)</li>
+<li><strong>Object Kind</strong> indicates protocol-specific page or message kind
+<ul>
+<li>kinds must be globally unique within DSF</li>
+<li>To apply for a page kind (or kinds) apply for a PR on this repo against the <code>KINDS.yml</code> listing</li>
+<li>For testing purposes and/or private use that does not require registration, an application ID of  <code>0x0FFF</code> may be used</li>
+<li>Bits 15:14 indicate the block base kind
+<ul>
+<li>0b00 for pages (service / peer registration etc.)</li>
+<li>0b01 for request messages (between peers)</li>
+<li>0b10 for response messages (between peers)</li>
+<li>0b11 for data (merkle-tree based data structures)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Index</strong>
+<ul>
+<li>For pages, this is a <em>Page Version</em>, a monotonically increasing counter for page replacement</li>
+<li>For messages, this is a <em>Request ID</em> to uniquely map request and response objects</li>
+<li>For data, this field must be 0x0000</li>
+</ul>
+</li>
+<li><strong>Data Length</strong>, length in bytes of the variable length data field</li>
+<li><strong>Secure Options length</strong>, length in bytes of the variable length secure options field
+<ul>
+<li>This allows options such as IP addresses for service connections to be encrypted alongside service data</li>
+</ul>
+</li>
+<li><strong>Public options length</strong>, length in bytes of the variable length public options field
+<ul>
+<li>These options are used to specify public page information such as Public Keys and Expiry Time</li>
+</ul>
+</li>
+<li><strong>ID</strong> is the <em>Service ID</em> for Pages and Data or the <em>Node ID</em> for messages</li>
+</ul>
+<h2><a class="header" href="#body" id="body">Body</a></h2>
+<ul>
+<li><strong>Data</strong> contains arbitrary data for service pages (based on the page kind), or DSF data for messages (such as pages to be transferred). The data section may be encrypted.</li>
+<li><strong>Secure Options</strong> contain options that are encrypted and can thus only be parsed by those with the appropriate keys</li>
+<li><strong>Public Options</strong> contain public options associated with a page or message</li>
+</ul>
+<h2><a class="header" href="#signature" id="signature">Signature</a></h2>
+<ul>
+<li><strong>Signature</strong> is a cryptographic signature across the whole object (header included) used to validate the authenticity of pages and messages.</li>
+</ul>
+<h2><a class="header" href="#encryption" id="encryption">Encryption</a></h2>
+<p>If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm, and must be decrypted before use. Encrypted fields must include any information required to decrypt them (ie. Nonces). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption (and increasing the field length), and removed prior to decryption (decreasing the field length).</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                             Field                             /
+/                    Optional, Variable Length                  /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h1><a class="header" href="#options" id="options">Options</a></h1>
+<p>Options are common objects for use across different page types. Some options may be required for a given page to be parsed or accepted into the database. Option Kind and Length are always specified for backwards / cross compatibility to allow parsers to skip unrecognised options.</p>
+<p><strong>Structure:</strong></p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Option Kind        |A|         Option Length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                          Option Data                          /
+/             Variable Length Data (32-bit aligned)             /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<p><strong>Kinds:</strong></p>
+<p>The top bit of the Option Kind field (marked <code>A</code>) indicates whether an option is part of the core implementation (A=0), or application specific (A=1) to allow mixed use of common DSF core options and application specific options in a single object.</p>
+<table><thead><tr><th align="left">Name</th><th align="left">ID</th><th align="left">Description</th><th align="left">Multiple?</th><th align="left">Size</th></tr></thead><tbody>
+<tr><td align="left"><a href="data-structures/options.html#pubkey">PubKey</a></td><td align="left">0x0000</td><td align="left">Public Key</td><td align="left">No</td><td align="left">32-byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#databaseid">DatabaseId</a></td><td align="left">0x0001</td><td align="left">Database (Peer or Page) ID</td><td align="left">No</td><td align="left">32-byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#prevsig">PrevSig</a></td><td align="left">0x0002</td><td align="left">Signature of the preceding object</td><td align="left">No</td><td align="left">64-byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#service-kind">Kind</a></td><td align="left">0x0003</td><td align="left">Arbitrary Service Kind</td><td align="left">No</td><td align="left">Variable</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#service-name">Name</a></td><td align="left">0x0004</td><td align="left">Arbitrary Service Name</td><td align="left">No</td><td align="left">Variable</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#ipv4-address">V4Addr</a></td><td align="left">0x0005</td><td align="left">IPv4 address and port</td><td align="left">Yes</td><td align="left">10 byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#ipv6-address">V6Addr</a></td><td align="left">0x0006</td><td align="left">IPv6 address and port</td><td align="left">Yes</td><td align="left">18 byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#issued">Issued/Since</a></td><td align="left">0x0007</td><td align="left">Issued or Since timestamp</td><td align="left">No</td><td align="left">8 byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#expiry">Expiry/Until</a></td><td align="left">0x0008</td><td align="left">Expiry or Until timestamp</td><td align="left">No</td><td align="left">8 byte</td></tr>
+<tr><td align="left">Limit</td><td align="left">0x0009</td><td align="left">Limit number of responses</td><td align="left">No</td><td align="left">4-byte</td></tr>
+<tr><td align="left"><a href="data-structures/options.html#metadata">Metadata</a></td><td align="left">0x000a</td><td align="left">Metadata Key-Value pair</td><td align="left">Yes</td><td align="left">Variable</td></tr>
+<tr><td align="left">Global Location</td><td align="left">0x0010</td><td align="left">GPS (Lat, Lng, Alt) location option</td><td align="left">No</td><td align="left">12-byte</td></tr>
+<tr><td align="left">Local Location</td><td align="left">0x0011</td><td align="left">Local (X, Y, Z) location option</td><td align="left">No</td><td align="left">12-byte</td></tr>
+<tr><td align="left"></td><td align="left"></td><td align="left"></td><td align="left"></td><td align="left"></td></tr>
+</tbody></table>
+<h2><a class="header" href="#pubkey" id="pubkey">PubKey</a></h2>
+<p>The cryptographic public key associated with a service or peer.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0000   |0|               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Public Key                          /
+/                    32-byte ECDSA Public Key                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#databaseid" id="databaseid">DatabaseId</a></h2>
+<p>The Database ID of a service, peer or page</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0001   |0|               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Database ID                           /
+/               32-byte Protocol Defined ID Length              /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#prevsig" id="prevsig">PrevSig</a></h2>
+<p>The signature of the previous object, used to construct verifiable signature-chains</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0002   |0|               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                      Previous Signature                       /
+/            64-byte Protocol Defined Signature Length          /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#service-kind" id="service-kind">Service Kind</a></h2>
+<p>Arbitrary service kind, a string that identifies a type of service, for example: <code>mqtt</code> for an MQTT broker. These are not required to be globally unique or consistent across different users (unless interoperability is desired).</p>
+<p>Note that for interoperability or more complex services with data, page kinds should be used in favour of this field.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Option Kind = 0x0003    |0|       Option Length = N       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                   Kind (utf8 encoded string)                  /
+/                        Variable Length                        /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#service-name" id="service-name">Service Name</a></h2>
+<p>Arbitrary service name, a user defined string to identify a service, for example: <code>home-web</code> for a home web server. These are not required to be globally unique or consistent across different users.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Option Kind = 0x0004    |0|       Option Length = N       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                   Name (utf8 encoded string)                  /
+/                        Variable Length                        /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#ipv4-address" id="ipv4-address">IPv4 Address</a></h2>
+<p>An IPv4 Address and Port for connecting to a service or peer.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0005   |0|       Option Length = 10      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          IPv4 Address                         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Port             |            Reserved           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#ipv6-address" id="ipv6-address">IPv6 Address</a></h2>
+<p>An IPv6 Address and Port for connecting to a service or peer.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0006   |0|       Option Length = 32      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                                                               |
+|                                                               |
+|                          IPv6 Address                         |
+|                                                               |
+|                                                               |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Port             |            Reserved           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#issuedsince" id="issuedsince">Issued/Since</a></h2>
+<p>A timestamp at which the page was issued or the since field for a time-bounded request.</p>
+<p>Encoded as a 64-bit little-endian uint representing milliseconds from the unix epoc.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0007   |0|       Option Length = 8       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Issued                             |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#expiryuntil" id="expiryuntil">Expiry/Until</a></h2>
+<p>A timestamp at which the page should expire, or the until field for a time-bounded request.</p>
+<p>Encoded as a 64-bit little-endian uint representing milliseconds from the unix epoc</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0008   |0|       Option Length = 8       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Expiry                             |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#limit" id="limit">Limit</a></h2>
+<p>A limit to set the maximum number of returned objects for a given request</p>
+<p>Encoded as a 64-bit little-endian uint representing milliseconds from the unix epoc</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0009   |0|       Option Length = 4       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Limit                              |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#metadata" id="metadata">Metadata</a></h2>
+<p>Arbitrary Key:Value pairs as UTF-8 strings, separated using the ascii <code>|</code> character, this character may not be used in the Key or Value terms.</p>
+<pre><code class="language-text"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x000a   |0|       Option Length = N       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                             String                            /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h1><a class="header" href="#pages" id="pages">Pages</a></h1>
+<p>Pages are split into two types, Primary pages published at an SID by the service holding the corresponding key pair, and Secondary pages published at an SID by a third party providing supplemental information or services. For example, these may be used by the service publisher to provide transient information alongside the service page.</p>
+<h2><a class="header" href="#fields" id="fields">Fields</a></h2>
+<p>See <a href="data-structures/pages.html###Common">Common</a> section for header information</p>
+<ul>
+<li><strong>ID</strong>, Service ID (hash of service public key)</li>
+<li><strong>Data</strong>, Arbitrary service data, parsing and encoding specific to a given service type (and thus page kind)</li>
+<li><strong>Secure Options</strong>, private (and encrypted) well-defined service options for a given page</li>
+<li><strong>Public Options</strong>, public well-defined service options for a given page</li>
+<li><strong>Signature</strong>, a cryptographic signature over the whole page</li>
+</ul>
+<p>If the <code>encrypted</code> flag is set, data and secure options fields must be decrypted before parsing.</p>
+<h2><a class="header" href="#primary-pages" id="primary-pages">Primary Pages</a></h2>
+<p>Primary pages are used for service definition / registration / discovery, and should include the information required to connect to a service (though this may be encrypted).</p>
+<p>The ID at which the page is published is a hash of the cryptographic public key of the service, and the page should be signed using this key.</p>
+<p>Data and Secure options are protocol specific. The public options must contain: The <code>Service Public Key</code> as well as <code>Issued</code> and <code>Expiry</code> timestamps. This page may contain <code>IPv4</code> and <code>IPv6</code> options to allow others to contact the peer, and these options may be in the public or secret option sections to support privacy.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Protocol Version        |        Application ID         |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Object Kind          |             Flags           |0|              
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Page Version = 0       |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                          Service ID                           /
+/                   DatabaseID Length (32-bytes)                /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                             Data                              /
+/       Optional, Variable Length Data (4-byte aligned)         /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Public Key Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x00             |               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Public Key                          /
+/                    32-byte ECDSA Public Key                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Issued Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x07             |               8               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                            Issued                             +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Expiry Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x08             |               8               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                            Expiry                             +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#secondary-pages" id="secondary-pages">Secondary Pages</a></h2>
+<p>Secondary pages are used for attaching information to services, and can be posted by a service or peers at the address of the service.</p>
+<p>The <code>Page ID</code> is that of the associated service, Data and Secure Options are protocol specific. Public options must contain the <code>Peer ID</code>, as well as <code>Issued</code> and <code>Expiry</code> timestamps. The Peer ID option links the secondary page to an existing primary page for the peer in question, where contact information is provided.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |        Application ID         |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Object Kind          |             Flags           |1|                      
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Page Version         |           Data Length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       Secure Options Len      |       Public Options Len      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                          Service ID                           /
+/                   DatabaseID Length (32-bytes)                /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                             Data                              /
+/       Optional, Variable Length Data (4-byte aligned)         /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Peer ID Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x01             |               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Peer ID                            /
+/               32-byte Protocol Defined ID Length              /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Issued Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x07             |               8               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                            Issued                             +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Expiry Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x08             |               8               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                            Expiry                             +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#peer-pages" id="peer-pages">Peer Pages</a></h3>
+<p>Peer pages are a special category of Primary pages used to identify Peers that may provide replication or mirroring of a service, and to provide a mechanism to connect back to those peers, designated using a <code>Page Kind</code> of <code>0x0001</code>.</p>
+<p>The <code>ID</code> is the ID of the peer (ie. hash of the peer's public key), and this must also contain a <code>PubKey</code> for the peer, <code>Issued</code> and <code>Expiry</code> timestamps. This page may contain <code>IPv4</code> and <code>IPv6</code> options to allow others to contact the peer, and these options may be in the public or secret option sections to support privacy.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x0001     |             Flags           |0|                       
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        Page Version = 0       |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Peer ID                            /
+/                   DatabaseID Length (32-bytes)                /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Peer ID Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x01             |               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Peer ID                            /
+/               32-byte Protocol Defined ID Length              /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Public Key Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x00             |               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Public Key                          /
+/                    32-byte ECDSA Public Key                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Issued Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x07             |               8               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                            Issued                             +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Expiry Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x08             |               8               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                            Expiry                             +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+IPv4 Address Option (Optional*, either option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x05             |               10              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          IPv4 Address                         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Port             |            Reserved           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+IPv4 Address Option (Optional*, either option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x06             |               10              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+|                                                               |
+|                                                               |
+|                          IPv6 Address                         |
+|                                                               |
+|                                                               |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              Port             |            Reserved           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h1><a class="header" href="#messages" id="messages">Messages</a></h1>
+<p>Messages are used for communication between DSF peers. All messages must contain a Node ID (DatabaseID) for the sender and a Request ID to pair requests and responses, and are signed using the key of the sender.</p>
+<h2><a class="header" href="#fields-1" id="fields-1">Fields</a></h2>
+<p>See <a href="data-structures/messages.html#Common">Common</a> section for header information</p>
+<ul>
+<li><strong>ID</strong>, Node ID (hash of peer public key)</li>
+<li><strong>Data</strong>, DSF message data</li>
+<li><strong>Secure Options</strong>, private (and encrypted) well-defined service options for a given message</li>
+<li><strong>Public Options</strong>, public well-defined service options for a given message</li>
+<li><strong>Signature</strong>, a cryptographic signature over the whole message</li>
+</ul>
+<h2><a class="header" href="#message-types" id="message-types">Message Types</a></h2>
+<table><thead><tr><th align="left">Name</th><th align="left">ID</th><th align="left">Description</th><th align="left">Type</th></tr></thead><tbody>
+<tr><td align="left">Hello</td><td align="left">0x4000</td><td align="left">Initiate communication with a peer or the network</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##ping">Ping</a></td><td align="left">0x4001</td><td align="left">Ping a peer to determine liveliness</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##FindNodes">FindNodes</a></td><td align="left">0x4002</td><td align="left">Find nodes near a specified ID</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##FindValues">FindValues</a></td><td align="left">0x4003</td><td align="left">Find values at a specified ID</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##Store">Store</a></td><td align="left">0x4004</td><td align="left">Store value(s) at a specified ID</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##Subscribe">Subscribe</a></td><td align="left">0x4005</td><td align="left">Subscribe to data from a given service</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##Register">Register</a></td><td align="left">0x4006</td><td align="left">Request service registration (used for delegation)</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##Query">Query</a></td><td align="left">0x4007</td><td align="left">Query for data from a given service</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##PushData">PushData</a></td><td align="left">0x4008</td><td align="left">Data objects sent to a subscriber or in response to a query</td><td align="left">Request</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##Status">Status</a></td><td align="left">0x8001</td><td align="left">Status message for responding to peer requests</td><td align="left">Response</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##NodesFound">NodesFound</a></td><td align="left">0x8002</td><td align="left">Return a list of nodes near a specified ID</td><td align="left">Response</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##ValuesFound">ValuesFound</a></td><td align="left">0x8003</td><td align="left">Return a list of values (pages) near a specified ID</td><td align="left">Response</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##NoResult">NoResult</a></td><td align="left">0x8004</td><td align="left">Indicate no nodes or values were found (or respond to a ping)</td><td align="left">Response</td></tr>
+<tr><td align="left"><a href="data-structures/messages.html##PullData">PullData</a></td><td align="left">0x8005</td><td align="left">Data returned in response to a query</td><td align="left">Response</td></tr>
+</tbody></table>
+<h2><a class="header" href="#request-messages" id="request-messages">Request Messages</a></h2>
+<h3><a class="header" href="#hello" id="hello">Hello</a></h3>
+<p>Hello messages are used to connect to a peer and exchange identity information, supporting bootstrapping onto the network and of future peer to peer communication.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4000     |             Flags             |           
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Public Key Option (Required, public option section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              0x00             |               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Public Key                          /
+/                    32-byte ECDSA Public Key                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#status" id="status">Status</a></h3>
+<p>Status response message to indicate request status to peers</p>
+<pre><code class="language-text">TODO
+</code></pre>
+<h3><a class="header" href="#ping" id="ping">Ping</a></h3>
+<p>Ping messages are used to ping peers to determine and maintain peer liveliness.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4001     |             Flags             |           
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#findnodes" id="findnodes">FindNodes</a></h3>
+<p>FindNodes is used to find a set of nodes close to the provided ID.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4002     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 32       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                   Find Node ID (DatabaseID)                   /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#findvalues" id="findvalues">FindValues</a></h3>
+<p>FindValues messages are used to search for values (ie. pages) within DSF.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4003     |             Flags             |              
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 32       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Value ID (Required, Body)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                     Value ID (DatabaseID)                     /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#store" id="store">Store</a></h3>
+<p>Store messages are used to store values (ie. pages) in DSF.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4004     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Pages (repeated, data section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Page                               /
+/           Variable Length (defined in page header)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#subscribe" id="subscribe">Subscribe</a></h3>
+<p>Subscribe messages are used to initiate a subscription to a given service, and must be periodically re-issued to continue the subscription.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4005     |             Flags             |          
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service ID (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Service ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#register" id="register">Register</a></h3>
+<p>Register messages are used to initiate a registration to a given service, and must be periodically re-issued to continue the registration.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4006     |             Flags             |          
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service Page (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                        Service Page                           /
+/           Variable Length (defined in page header)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Expiry for delegation (Optional)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0008   |0|       Option Length = 8       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Expiry                             |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#query" id="query">Query</a></h3>
+<p>Query messages are used to request a chunk of data for a given service, resulting in a PullData response.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4007     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service ID (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Service ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Options
+
+PrevSig to retrieve all subsequent objects (optional)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0002   |0|               32              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                      Previous Signature                       /
+/            64-byte Protocol Defined Signature Length          /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Since to retrieve all objects published after the specified time (optional) 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0007   |0|       Option Length = 8       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Issued                             |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Until to retrieve all objects published prior to the specified time (optional)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0008   |0|       Option Length = 8       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Expiry                             |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Limit to specify the maximum number of objects returned (optional)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Option Kind = 0x0009   |0|       Option Length = 4       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                            Limit                              |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#pushdata" id="pushdata">PushData</a></h3>
+<p>PushData messages are used to send data to subscribers as it becomes available</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x4008     |             Flags             | |             
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Service ID (Required, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                         Service ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Data Pages (repeated, data section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                          Data Page                            /
+/           Variable Length (defined in page header)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h2><a class="header" href="#response-messages" id="response-messages">Response Messages</a></h2>
+<h3><a class="header" href="#status-1" id="status-1">Status</a></h3>
+<p>Status message, used as a response for requests where status information is required, for example, in response to Hello, Subscription, and Query messages.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x8008     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+StatusCode
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Status Code (4-bytes)                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h4><a class="header" href="#status-codes" id="status-codes">Status Codes</a></h4>
+<table><thead><tr><th align="left">Code</th><th align="left">Name</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">0x00000000</td><td align="left">OK</td><td align="left">Request successful</td></tr>
+<tr><td align="left"></td><td align="left"></td><td align="left"></td></tr>
+<tr><td align="left"></td><td align="left"></td><td align="left"></td></tr>
+</tbody></table>
+<h3><a class="header" href="#nodesfound" id="nodesfound">NodesFound</a></h3>
+<p>NodesFound contains a list of nodes near the requested ID. This may be returned as a response to a FindNodes or FindValues request.</p>
+<p><code>Peer Blocks</code> consist of a sequential set of options beginning with a Peer ID, and followed by any options to attach to that Peer ID. A peer block must have at least one of the V4Addr and v6Addr options to be considered valid.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x8006     |             Flags             |             
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |     Public Options Len = M    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Peer Block (repeated, Data Section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                      Database ID Option                       /
+/             Protocol Defined ID Length (32-bytes)             /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                   V4Addr Option (optional)                    /
+/                IPv4 Address of pervious peer                  /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                   V6Addr Option (optional)                    /
+/                IPv4 Address of pervious peer                  /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
+/                   PubKey Option (optional)                    /
+/                   PubKey for previous peer                    /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                    64-byte Signature Length                   /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#valuesfound" id="valuesfound">ValuesFound</a></h3>
+<p>ValuesFound messages contain a list of values (pages) associated with the value requested.</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x8007     |             Flags             |           
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = N        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = M     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Pages (repeated, Data section)
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                Page associated with Value                     /
+/           Variable Length (defined in page header)            /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h3><a class="header" href="#noresult" id="noresult">NoResult</a></h3>
+<p>Response to Pings and FindNode or FindValue messages where no data was found</p>
+<pre><code class="language-text">Header
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Protocol Version = 0x0000   |    Application ID = 0x0000    |  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|      Object Kind = 0x8008     |             Flags             |            
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Request ID          |        Data Length = 0        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Secure Options Len = 0    |    Public Options Len = N     |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                            Node ID                            /
+/             Protocol Defined ID Length (32-bytes)             /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Signature
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+/                           Signature                           /
+/                   64-byte Signature Length                    /
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre>
+<h1><a class="header" href="#apis" id="apis">APIs</a></h1>
+<p>DSF provides a standard set of APIs available either through interaction with the Daemon, or using delegation.
+These APIs may be exercised using the client library or the daemon JSON-RPC over unix socket interface directly, or by using DSF messages via delegation.
+Further documentation on API methods is provided as part of the <a href="">dsf-core</a> implementation.</p>
+<table><thead><tr><th>Method</th><th>API</th><th>Description</th></tr></thead><tbody>
+<tr><td>create(o: &amp;Options) -&gt; ServiceHandle</td><td>Core</td><td>Create a new service instance</td></tr>
+<tr><td>register(s: &amp;mut ServiceHandle) -&gt; FutureResult&lt;(), Error&gt;</td><td>Service</td><td>Register a service in the database</td></tr>
+<tr><td>locate(id: &amp;Id) -&gt; FutureResult&lt;ServiceHandle, Error&lt;</td><td>Service</td><td>Locate a service in the database by ID</td></tr>
+<tr><td>publish(s: &amp;mut ServiceHandle, d: &amp;Data) -&gt; FutureResult&lt;(), Error&gt;</td><td>Data</td><td>Publish data using a given service</td></tr>
+<tr><td>subscribe(s: &amp;mut ServiceHandle, o: Options) -&gt; FutureStream&lt;Data, Error&gt;</td><td>Data</td><td>Subscribe to the provided service</td></tr>
+</tbody></table>
+<h1><a class="header" href="#operation" id="operation">Operation</a></h1>
+<p>This section covers the high-level processes for interacting with DSF, and the lower level operations that support these operations.</p>
+<p>This is intended to be expanded with sequence diagrams and test vectors for DSF implementations.</p>
+<h1><a class="header" href="#high-level-operations" id="high-level-operations">High Level Operations</a></h1>
+<p>This section covers the high-level processes for interacting with DSF, this is supported by lower level operations that enable storage and querying using the DHT and subscription and publication of data to services.
+It is intended this will be expanded to become the source of truth for all DSF operations, however, currently this documentation lags <a href="operation/">dsf-impl</a>.</p>
+<h2><a class="header" href="#connecting-to-the-network" id="connecting-to-the-network">Connecting to the network</a></h2>
+<ol>
+<li>Generate a new keypair and DatabaseID for the new node (this may be persisted as desired)</li>
+<li>Connect to a &quot;bootstrap&quot; node (address only) that is already a member of the network</li>
+<li>Generate a new Primary page containing the node information</li>
+<li>Publish the new primary page to DSF at the Node DatabaseID</li>
+</ol>
+<h2><a class="header" href="#publishing-a-service" id="publishing-a-service">Publishing a service</a></h2>
+<ol>
+<li>Generate a new keypair and Database ID for the new service (this should be stored)</li>
+<li>Generate a new Primary page containing the service information</li>
+<li>Publish the new primary page to DSF at the Service DatabaseID</li>
+</ol>
+<h2><a class="header" href="#updating-a-service" id="updating-a-service">Updating a service</a></h2>
+<ol>
+<li>Update the service information / definition</li>
+<li>Generate an updated Primary page containing the service updated information</li>
+<li>Publish the updated primary page to DSF at the Service DatabaseID</li>
+</ol>
+<h2><a class="header" href="#locating-a-service" id="locating-a-service">Locating a service</a></h2>
+<ol>
+<li>Search for pages at a given ID</li>
+<li>Parse and Reduce returned pages (one primary, N secondary)</li>
+<li>Check Key / Signature against pinned values (if available)</li>
+<li>Return service</li>
+</ol>
+<h2><a class="header" href="#subscribing-to-a-service" id="subscribing-to-a-service">Subscribing to a service</a></h2>
+<ol>
+<li>Search for pages at a given ID</li>
+<li>Parse and Reduce returned pages (filter for replicas)</li>
+<li>Select a subset of replicas based on QoS / availability</li>
+<li>Issue SubscribeRequest messages to replica subset to request future updates</li>
+</ol>
+<h2><a class="header" href="#querying-for-service-data" id="querying-for-service-data">Querying for service data</a></h2>
+<ol>
+<li>Search for pages at a given ID</li>
+<li>Parse and Reduce returned pages (filter for replicas)</li>
+<li>Select a subset of replicas based on QoS / availability</li>
+<li>Issue Query messages to replica subset to request data</li>
+</ol>
+<h1><a class="header" href="#low-level-operations" id="low-level-operations">Low Level Operations</a></h1>
+<p>This page describes low-level operations that must be implemented by DSF clients to support the defined higher level operations.
+It is intended this will be expanded to become the source of truth for all DSF operations, however, currently this documentation lags <a href="operation/">dsf-impl</a>.</p>
+<h2><a class="header" href="#messaging" id="messaging">Messaging</a></h2>
+<h3><a class="header" href="#receiving-a-message" id="receiving-a-message">Receiving a message</a></h3>
+<ol>
+<li>Locate the public key associated with the peer (from the database or local cache)</li>
+<li>Validate the message signature against discovered ID</li>
+<li>Add public key to local cache</li>
+<li>Handle message and reply</li>
+</ol>
+<h3><a class="header" href="#sending-a-message" id="sending-a-message">Sending a message</a></h3>
+<ol>
+<li>Locate the public key and address associated with the peer (from the database or local cache)</li>
+<li>Sign message</li>
+<li>(Optionally) Encrypt message against peer public key</li>
+<li>Send message to peer address</li>
+</ol>
+<h2><a class="header" href="#storing-and-retrieving-pages" id="storing-and-retrieving-pages">Storing and retrieving pages</a></h2>
+<h3><a class="header" href="#storing-a-primary-page" id="storing-a-primary-page">Storing a Primary Page</a></h3>
+<ol>
+<li>Locate the public key associated with the page ID (included in page, from the database, from the local cache)</li>
+<li>Validate the ID matches the public key</li>
+<li>Validate the signature</li>
+<li>Parse the options</li>
+<li>Check required options exist</li>
+<li>Check new page version &gt; last page version</li>
+<li>Store page</li>
+</ol>
+<h3><a class="header" href="#storing-a-secondary-page" id="storing-a-secondary-page">Storing a Secondary Page</a></h3>
+<ol>
+<li>Find the public key associated with the peer ID (from the database or local cache)</li>
+<li>Validate the ID matches the public key</li>
+<li>Validate the signature</li>
+<li>Parse the options</li>
+<li>Check required options exist</li>
+<li>Check new page version &gt; last page version</li>
+<li>Store page</li>
+</ol>
+<h3><a class="header" href="#receiving-a-requested-page" id="receiving-a-requested-page">Receiving a (Requested) Page</a></h3>
+<ol>
+<li>Find the public key associated with the page ID (included in page, from the database, from the local cache)</li>
+<li>Validate the message signature against discovered ID</li>
+<li>Add public key to local cache</li>
+<li>Return page</li>
+</ol>
+<h2><a class="header" href="#requesting-and-sending-data" id="requesting-and-sending-data">Requesting and Sending Data</a></h2>
+<h2><a class="header" href="#handling-failures" id="handling-failures">Handling failures</a></h2>
+<p>On a signature verification failure</p>
+<ul>
+<li>increment peer failure count</li>
+<li>if failure count &gt; max failures, add ID / Address to block list</li>
+</ul>
+<h1><a class="header" href="#security" id="security">Security</a></h1>
+<h2><a class="header" href="#cryptography" id="cryptography">Cryptography</a></h2>
+<p>DSF uses modern cryptographic primitives provided by libsodium, specifically Ed25519 for signing, and XSalsa20/Poly1305 for symmetric encryption / decryption, and SHA-256 hashes. It is intended that future protocol versions may support alternative cryptographic functions, and fields have been reserved for this possibility.</p>
+<h2><a class="header" href="#threats" id="threats">Threats</a></h2>
+<ul>
+<li>Service Impersonation / Hijacking / Person in the Middle</li>
+<li>Information Leakage / Privacy</li>
+<li>Denial of Service</li>
+<li>Misuse</li>
+</ul>
+<h2><a class="header" href="#mitigations" id="mitigations">Mitigations</a></h2>
+<p>Service impersonation is mitigated through the use of cryptographically derived service identifiers and public key signatures, requiring the associated public-private key pair to publish pages or send messages as a service. These keys are pinned on first use, decreasing the opportunity for collision attacks were it possible to generate a colliding public/private key pair with the same service ID. In addition, on receiving a message the peer MAY perform a page lookup to validate the id and public key match those attached to the message, (though this MUST be ignored if no results are found to allow node bootstrapping).</p>
+<p>Privacy is provided using symmetric encryption over page body and secure option fields. This allows services to be published to DSF while containing private information such as IP Addresses or other metadata. In order to perform successful discovery of encrypted services the discovering party must have a copy of the symmetric encryption key.</p>
+<p>Denial of service attacks are mitigated through the use of cryptographic identities (increasing the cost of creating arbitrary nodes) as well as using an aggressive approach to temporarily blocking clients and addresses on a per-node basis.</p>
+<p>A danger of any distributed system is abuse for storage or other malicious purposes. This is considered to be an undesirable but unavoidable side effect of designing secure and privacy preserving software. The impact of this abuse is mitigated in DSF through the use of strictly typed messages, size limits on encrypted (and thus un-observable) fields, and client rate limiting. As a further mitigation it is proposed that shared blocklists may be used to permanently disable known bad nodes.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

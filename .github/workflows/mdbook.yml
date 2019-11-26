@@ -1,0 +1,18 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Generate mdbook
+      uses: ryankurte/action-mdbook@0.1.1
+    - name: GitHub Pages
+      uses: crazy-max/ghaction-github-pages@v1.2.4
+      with:
+        build_dir: book
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
