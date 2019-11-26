@@ -8,9 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Actions for mdbook
-      uses: JohnTitor/actions-mdbook@0.1.1
+    - name: Generate mdbook
+      uses: ryankurte/actions-mdbook
     - name: GitHub Pages
       uses: crazy-max/ghaction-github-pages@v1.2.4
       with:
         build_dir: book
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
