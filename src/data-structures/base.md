@@ -88,7 +88,9 @@ A common common base structure is used across Pages, Messages, and Data, to simp
   * kinds must be globally unique within DSF
   * To apply for a page kind \(or kinds\) apply for a PR on this repo against the `KINDS.yml` listing
   * For testing purposes and/or private use that does not require registration, an application ID of  `0x0FFF` may be used
-  * Bits 15:14 indicate the block base kind
+  * Bit 15 indicates whether a page is defined by DSF core (0) or the application protocol (1)
+    * This is to allow the re-use of standard pages between applications where suitable, and to inform DSF as to whether objects should be parsed by the daemon
+  * Bits 14:13 indicate the block base kind
     * 0b00 for pages \(service / peer registration etc.\)
     * 0b01 for request messages \(between peers\)
     * 0b10 for response messages \(between peers\)

@@ -12,23 +12,31 @@ applications:
         name: Replica Page
         description: Replica pages link an existing service to a peer that is replicating that service
     messages:
-      - id: 0x4000
+      - id: 0x2000
         name: Hello
-      - id: 0x4001
+      - id: 0x2001
         name: Ping
-      - id: 0x4002
+      - id: 0x2002
         name: FindNodes
-      - id: 0x4003
+      - id: 0x2003
         name: FindValues
-      - id: 0x4004
+      - id: 0x2004
         name: Store
-      - id: 0x8001
+      - id: 0x4001
         name: Status
-      - id: 0x8006
+      - id: 0x4006
         name: NodesFound
-      - id: 0x8007
+      - id: 0x4007
         name: ValuesFound
-      - id: 0x8008
+      - id: 0x4008
         name: NoResult
+  iot:
+    id: 0x0001
+    description: Internet of Things (IoT) application
+    pages:
+      - id: 0x8001
+        name: IoT Service Description
+      - id: 0x8002
+        name: IoT Data
 
   
