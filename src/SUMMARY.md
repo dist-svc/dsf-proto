@@ -11,8 +11,8 @@
 * [Operation](operation/README.md)
   * [High Level Operations](operation/high-level-operations.md)
   * [Low Level Operations](operation/low-level-operations.md)
+* [Applications](applications/README.md)
 * [Security](security.md)
 
-## Applications
 
 
