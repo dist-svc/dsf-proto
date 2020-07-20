@@ -16,7 +16,7 @@ See [Common](messages.md#Common) section for header information
 
 | Name | ID | Description | Type |
 | :--- | :--- | :--- | :--- |
-| Hello | 0x4000 | Initiate communication with a peer or the network | Request |
+| [Hello](messages.md##Hello) | 0x4000 | Initiate communication with a peer or the network | Request |
 | [Ping](messages.md##ping) | 0x4001 | Ping a peer to determine liveliness | Request |
 | [FindNodes](messages.md##FindNodes) | 0x4002 | Find nodes near a specified ID | Request |
 | [FindValues](messages.md##FindValues) | 0x4003 | Find values at a specified ID | Request |
