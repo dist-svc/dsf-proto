@@ -24,6 +24,13 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 /                                                               /
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /                                                               /
+/                    Symmetric encryption Tag                   /
+/                        Optional, 40 bytes                     /
+/                                                               /
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+/                                                               /
 /                        Public Options                         /
 /                Optional, Variable Length Data                 /
 /                                                               /
@@ -118,16 +125,5 @@ A common common base structure is used across Pages, Messages, and Data, to simp
 
 ## Encryption
 
-If the encryption flag is set, Data and SecureOptions fields are encrypted using the specified algorithm, and must be decrypted before use. Encrypted fields must include any information required to decrypt them \(ie. Nonces\). In the current scheme, the cryptographic nonce is appended to the end of the field following encryption \(and increasing the field length\), and removed prior to decryption \(decreasing the field length\).
-
-```text
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-/                                                               /
-/                             Field                             /
-/                    Optional, Variable Length                  /
-/                                                               /
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-```
-
+If the encryption flag is set, Data and Secure Options fields are encrypted using the specified algorithm, and must be decrypted before use.
+The specified cryptographic algorithm is executed over the body and private options fields, with the tag (Nonce and MAC) injected immediately after.
